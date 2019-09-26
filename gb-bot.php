@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;Bot
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.0.1
+* Version: 0.0.2
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 **/
@@ -19,7 +19,7 @@ $myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 // Add scripts to wp_footer()
 function gb_bot_footer_script() {
 	// Your PHP goes here
-	echo "<!-- gb-bot -->";
+	echo "<!-- GB-Bot -->";
 }
 add_action( 'wp_footer', 'gb_bot_footer_script' );
 
