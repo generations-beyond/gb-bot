@@ -3,18 +3,19 @@
 * Plugin Name: GB&bull;Bot
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.0.2
+* Version: 0.0.3
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 **/
 
 // Plugin Update Checker Support
 require 'plugin-update-checker/plugin-update-checker.php';
-$myUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	'https://bitbucket.org/generationsbeyond/gb-bot',
 	__FILE__,
 	'gb-bot'
 );
+$gbBotUpdateChecker->setBranch('develop');
 
 // Add scripts to wp_footer()
 function gb_bot_footer_script() {
