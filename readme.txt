@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 5.0.0
 Tested up to: 5.2.3
-Stable tag: 0.0.4
+Stable tag: 0.0.5
 Requires PHP: 5.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -22,5 +22,8 @@ The Internet of Things (IoT) is growing every day. Wouldn't it make sense that y
 
 == Changelog ==
 
+#### 0.0.5 - 2019-09-26
+* Added service information to the admin page.
+
 #### 0.0.1 - 2019-09-26
-* Initial release
+* Initial release.

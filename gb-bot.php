@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;Bot
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.0.4
+* Version: 0.0.5
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 **/
@@ -31,5 +31,16 @@ function gb_bot_setup_menu(){
 }
 
 function gb_bot_init(){
-	echo "<h1>GB&bull;Bot</h1>";
+	echo 
+<<<EOT
+<div class="wrap">
+	<h1>GB•Bot</h1>
+	<h2>Live Analytics</h2>
+	<p>Chances are you have analytics already being collected on your website, but how often do you check them? And when you do check them, how easily are you able to interpret your stats? GB•BOT allows us to create a live data feed to a monitor in your office so you can keep an eye on your stats with an easy to understand interface.</p>
+	<h2>Rebound Tracking</h2>
+	<p>A vast majority of website visitors will leave your site without contacting you or filling out a data capture form, but what if there was a way to send anonymous direct mail to those visitors even without getting their address? Thanks to ReBound Marketing, this is now possible and the technology comes standard with GB•BOT.</p>
+	<h2>IoT Notifications</h2>
+	<p>The Internet of Things (IoT) is growing every day. Wouldn't it make sense that your website become a part of it? With GB•BOT installed, we have the ability to trigger real objects in your office, such as an internet-enabled light bulb to react whenever you get a new website lead.</p>
+</div>
+EOT;
 }
