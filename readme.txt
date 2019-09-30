@@ -2,8 +2,8 @@
 Contributors: genbeyond
 Requires at least: 5.0.0
 Tested up to: 5.2.3
-Stable tag: 0.0.5
-Requires PHP: 5.4
+Stable tag: 0.1.0
+Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -21,6 +21,10 @@ A vast majority of website visitors will leave your site without contacting you 
 The Internet of Things (IoT) is growing every day. Wouldn't it make sense that your website become a part of it? With GB•BOT installed, we have the ability to trigger real objects in your office, such as an internet-enabled light bulb to react whenever you get a new website lead.
 
 == Changelog ==
+
+#### 0.1.0 - 2019-09-30
+* Added a field to input a GB ReBound ID.
+* Restructured the admin page and added new information.
 
 #### 0.0.5 - 2019-09-26
 * Added service information to the admin page.
