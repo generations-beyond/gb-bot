@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.1.1
+* Version: 0.1.2
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -17,7 +17,8 @@ $gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	__FILE__,
 	'gb-bot'
 );
-require 'env.php';
+if (file_exists('env.php'))
+	include 'env.php';
 $gbBotUpdateChecker->setBranch(isset($gbbot_env) ? $gbbot_env : 'master'); // Set in env.php
 
 class GBBot {
@@ -28,7 +29,7 @@ class GBBot {
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '0.1.1';
+		$this->plugin->version      = '0.1.2';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
