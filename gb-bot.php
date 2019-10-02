@@ -125,7 +125,8 @@ class GBBot {
 		}
 
 		// Output
-		echo "<!-- " . wp_unslash( $meta ) . " -->";
+		echo '<!-- GB ReBound Pixel -->';
+		echo '<img src="https://trkn.us/pixel/conv/ppt=9999;g=homepage;gid=99999;ord=' . wp_unslash( $meta ) . '" height="0" width="0" border="0"  />';
 	}
 }
 
