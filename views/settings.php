@@ -28,7 +28,7 @@
 								Chances are you have analytics already being collected on your website, but how often do you check them? And when you do check them, how easily are you able to interpret your stats? GB•BOT allows us to create a live data feed to a monitor in your office so you can keep an eye on your stats with an easy to understand interface.
 							</p>
 							<p>
-								<em>Coming Soon</em>
+								<em>To begin viewing your live analytics data, contact <a href="https://generationsbeyond.com/#contact" target="_blank" rel="nofollow">Generations Beyond</a>.</em>
 							</p>
 						</div>
 					</div>
@@ -37,7 +37,7 @@
 						<h3 class="hndle">ReBound Tracking</h3>
 						<div class="inside">
 							<p>
-								ReBound allows you to directly market to what we call "hand raisers"&ndash;potential customers who have browsed a specific product or service on your website, but left without leaving their contact information. We now have the technology to reach them anyway! Enter your ReBound Tracking ID in the box below to begin gathering data.
+								ReBound allows you to directly market to what we call "hand raisers"&ndash;potential customers who have browsed a specific product or service on your website, but left without leaving their contact information. We now have the technology to reach them anyway! Enter your ReBound Tracking ID in the box below to enable ReBound tracking.
 							</p>
 							<table class="form-table" role="presentation">
 								<tbody>
@@ -46,7 +46,7 @@
 										<td>
 											<input name="gbbot_rebound_id" type="text" id="gbbot_rebound_id" value="<?php echo $this->settings['gbbot_rebound_id']; ?>" class="regular-text ltr">
 											<p>
-												To obtain your ReBound Tracking ID, contact <a href="https://generationsbeyond.com/rebound-marketing/" target="_blank" rel="nofollow">Generations Beyond</a>.
+												<em>To obtain your ReBound Tracking ID, contact <a href="https://generationsbeyond.com/rebound-marketing/" target="_blank" rel="nofollow">Generations Beyond</a>.</em>
 											</p>
 										</td>
 									</tr>
@@ -62,7 +62,7 @@
 								The Internet of Things (IoT) is growing every day. Wouldn't it make sense that your website become a part of it? With GB•BOT installed, we have the ability to trigger real objects in your office, such as an internet-enabled light bulb to react whenever you get a new website lead.
 							</p>
 							<p>
-								<em>Coming Soon</em>
+								<em>To inquire about IoT Notifications, contact <a href="https://generationsbeyond.com/#contact" target="_blank" rel="nofollow">Generations Beyond</a>.</em>
 							</p>
 						</div>
 					</div>

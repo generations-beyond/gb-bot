@@ -1,8 +1,8 @@
 === GB&bull;BOT ===
 Contributors: genbeyond
 Requires at least: 5.0.0
-Tested up to: 5.2.3
-Stable tag: 0.1.2
+Tested up to: 5.2.4
+Stable tag: 0.1.3
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -22,7 +22,7 @@ The Internet of Things (IoT) is growing every day. Wouldn't it make sense that y
 
 == Changelog ==
 
-#### 0.1.2 - 2019-10-01
+#### 0.1.3 - 2019-10-21
 * Bug fixes.
 
 #### 0.1.1 - 2019-10-01
