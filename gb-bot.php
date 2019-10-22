@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.1.2
+* Version: 0.1.3
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -29,7 +29,7 @@ class GBBot {
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '0.1.2';
+		$this->plugin->version      = '0.1.3';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
