@@ -1,4 +1,3 @@
-<?php require_once($this->plugin->folder . 'includes\functions.php' ); ?>
 <div class="wrap">
 	<h1><?php echo $this->plugin->displayName; ?> Settings</h1>
 
@@ -19,7 +18,7 @@
 		<div id="post-body" class="metabox-holder columns-2">
 			<!-- Content -->
 			<?php 
-			require_once($this->plugin->folder . '/views/modules/nav.php');
+			require_once($this->plugin->folder . 'views/modules/nav.php');
 			if (isset($_GET["page"])) {
 				if ($_GET["page"] == 'gb-bot') {
 					$cur_page = 'settings.php';
@@ -27,14 +26,14 @@
 				else {
 					$cur_page = $_GET["page"] . '.php';
 				}
-				include($this->plugin->folder . '/views/modules/' . $cur_page);
+				include($this->plugin->folder . 'views/modules/' . $cur_page);
 			}
 			?>
 			
 
 			<!-- Sidebar -->
 			<div id="postbox-container-1" class="postbox-container">
-				<?php require_once( $this->plugin->folder . '/views/sidebar.php' ); ?>
+				<?php require_once( $this->plugin->folder . 'views/sidebar.php' ); ?>
 			</div>
 			<!-- /postbox-container -->
 		</div>

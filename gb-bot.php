@@ -17,11 +17,11 @@ $gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	__FILE__,
 	'gb-bot'
 );
-if (file_exists('env.php'))
+if (file_exists('../wp-content/plugins/gb-bot/env.php'))
 	include 'env.php';
 $gbBotUpdateChecker->setBranch(isset($gbbot_env) ? $gbbot_env : 'master'); // Set in env.php
 
-require_once('includes\functions.php' );
+require_once('includes/functions.php' );
 
 class GBBot {
 	/**
@@ -64,7 +64,7 @@ class GBBot {
 	* Output the Dashboard Widget
 	*/
 	function renderDashboardWidget() {
-		include_once( $this->plugin->folder . '/views/dashboard-widget.php' );
+		include_once( $this->plugin->folder . 'views/dashboard-widget.php' );
 	}
 
 	/**
