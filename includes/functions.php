@@ -73,6 +73,9 @@ function gbbot_register_cpt() {
  * Register meta box(es).
  */
 function gbtc_cpt_register_meta_boxes() {
+    $post_label = gbbot_cpt_settings("label");
+    $post_type = gbbot_cpt_settings("type");
+    
     add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbtc_team_details_display_callback', $post_type );
 }
 add_action( 'add_meta_boxes', 'gbtc_cpt_register_meta_boxes' );

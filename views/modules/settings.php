@@ -22,7 +22,6 @@
 				</p>
 				<p>
 					Post type slug: <input name="gbbot_team_post_type" type="text" id="gbbot_team_post_type" value="<?=$gbbot_team_post_type?>" placeholder="Ex: team_member">
-					<br/><sub>*note: no spaces</sub>
 				</p>
 			</div>
 		</div>
@@ -35,5 +34,6 @@
 <script>
 		document.getElementById('gbbot_team_post_type').addEventListener('keyup',function(e) {
 			this.value = this.value.replace(/[ ]/,'_');
+			this.value = this.value.toLowerCase();
 		});
 </script>
