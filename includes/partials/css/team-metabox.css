@@ -1,0 +1,46 @@
+<style>
+    .team-details-wrap {
+        margin-right: -12px;
+        margin-left: -12px;
+    }
+    .team-details-wrap .flex-row {
+        flex-wrap: wrap;
+        display: flex;
+    }
+    .team-details-wrap label {
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    .flex-row {
+        padding: 15px 12px;
+    }
+    .flex-row:not(:first-of-type) {
+        border-top: #ccd0d4 solid 1px;
+    }
+    .flex-row > label,
+    .flex-row > div {
+        flex: 1 1 100%;
+    }
+    .input-fields-wrap {
+        border: solid 1px #ccd0d4;
+        background: #fff;
+    }
+    .field-wrap {
+        padding: 15px 12px;
+        border: 1px solid #eeeeee;
+    }
+    .field-wrap.full {
+        display: flex;
+        flex-direction: column;
+    }
+    .input-fields-wrap.name,
+    .input-fields-wrap.contact {
+        display: flex;
+    }
+    .input-fields-wrap.name .field-wrap,
+    .input-fields-wrap.contact .field-wrap {
+        display: flex;
+        flex-direction: column;
+        flex: 1 1 33%;
+    }
+</style>
