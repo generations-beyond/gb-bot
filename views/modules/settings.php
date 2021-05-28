@@ -9,24 +9,34 @@
 
 	<div id="post-body-content">
 		<div class="postbox">
-			<h3 class="hndle">GB Bot CPT</h3>
+			<h3 class="hndle">"Team Member" Custom Post Type</h3>
 			<div class="inside">
 				<p>
-					Custom Post Types: 
+					This is a custom post type that includes a collection of fields that are useful for any website needing an "About Us" section that features members of their organization or team.
 				</p>
-				<p>
-					<input name="gbbot_team_cpt_enable" type="checkbox" id="gbbot_team_cpt_enable" value='1' <?=$gbbot_team_cpt_enable?'checked':''?> > Enable 
-				</p>
-				<p>
-					Post type label: <input name="gbbot_team_post_label" type="text" id="gbbot_team_post_label" value="<?=$gbbot_team_post_label?>" placeholder="Ex: Team">
-				</p>
-				<p>
-					Post type slug: <input name="gbbot_team_post_type" type="text" id="gbbot_team_post_type" value="<?=$gbbot_team_post_type?>" placeholder="Ex: team_member">
-				</p>
+				<table class="form-table">
+					<tbody>
+						<tr>
+							<th scope="row">Enable</th>
+							<td><input name="gbbot_team_cpt_enable" type="checkbox" id="gbbot_team_cpt_enable" value='1' <?=$gbbot_team_cpt_enable?'checked':''?> ></td>
+						</tr>
+						<tr>
+							<th scope="row">Post Type Label</th>
+							<td><input name="gbbot_team_post_label" type="text" id="gbbot_team_post_label" value="<?=$gbbot_team_post_label?>" placeholder="Ex: Team"></td>
+						</tr>
+						<tr>
+							<th scope="row">Post type slug</th>
+							<td>
+								<input name="gbbot_team_post_type" type="text" id="gbbot_team_post_type" value="<?=$gbbot_team_post_type?>" placeholder="Ex: team_member">
+								<p class="description">
+									<span style="color: red;">Warning: Changing the post type slug after creating Team Members can cause existing Team Members to disappear.</span>
+								</p>
+							</td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
-
-		
 
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>
 	</div>
