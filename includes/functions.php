@@ -3,9 +3,9 @@
 *Team Post type options
 */
 function gbbot_cpt_settings($option) {
-	$gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable');
-	$gbbot_team_post_label = get_option('gbbot_team_post_label');
-	$gbbot_team_post_type = get_option('gbbot_team_post_type');
+    $gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable');
+    $gbbot_team_post_label = !empty(get_option('gbbot_team_post_label')) ? get_option('gbbot_team_post_label') : 'Team';
+    $gbbot_team_post_type = !empty(get_option('gbbot_team_post_type')) ? get_option('gbbot_team_post_type') : 'team_member';
 
     switch ($option) {
         case 'enabled':
@@ -78,9 +78,6 @@ function gbtc_cpt_register_meta_boxes() {
     
     add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbtc_team_details_display_callback', $post_type );
 }
-add_action( 'add_meta_boxes', 'gbtc_cpt_register_meta_boxes' );
-
-
 
 /**
  * Meta box display callback.

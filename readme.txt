@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 5.0.0
 Tested up to: 5.7.2
-Stable tag: 0.2.0
+Stable tag: 0.2.1
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -24,6 +24,9 @@ The Internet of Things (IoT) is growing every day. Wouldn't it make sense that y
 A standardized custom post type with a collection of fields that will be useful for any website needing an "About Us" section that features members of their organization or team.
 
 == Changelog ==
+
+#### 0.2.1 - 2021-06-16
+* Bug fixes.
 
 #### 0.2.0 - 2021-05-25
 * CPT for Team Members added.
