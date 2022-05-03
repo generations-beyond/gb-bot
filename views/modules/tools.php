@@ -53,9 +53,6 @@
 			justify-content: space-between;
 			margin-bottom: 5px;
 		}
-		.gb-euc-element > * {
-
-		}
 		@media (max-width: 1576px) {
 			.gb-euc-wrap > .postbox {
 				flex: 0 1 calc(33.33% - 10px);
