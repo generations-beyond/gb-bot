@@ -1,9 +1,9 @@
 === GB&bull;BOT ===
 Contributors: genbeyond
 Requires at least: 5.0.0
-Tested up to: 5.7.2
-Stable tag: 0.2.1
-Requires PHP: 7.0
+Tested up to: 5.9.3
+Stable tag: 0.3.0
+Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -23,7 +23,13 @@ The Internet of Things (IoT) is growing every day. Wouldn't it make sense that y
 = Team Member Custom Post Type = 
 A standardized custom post type with a collection of fields that will be useful for any website needing an "About Us" section that features members of their organization or team.
 
+= Elements Usage Calculator for Elementor = 
+An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
+
 == Changelog ==
+
+#### 0.3.0 - 2022-04-29
+* Added Tools menu and Elements Usage Calculator for Elementor.
 
 #### 0.2.1 - 2021-06-16
 * Bug fixes.

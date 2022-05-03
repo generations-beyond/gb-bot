@@ -20,11 +20,13 @@
 			<?php 
 			require_once($this->plugin->folder . 'views/modules/nav.php');
 			if (isset($_GET["page"])) {
-				if ($_GET["page"] == 'gb-bot') {
+				if ($_GET["page"] == $this->plugin->name) {
 					$cur_page = 'settings.php';
 				}
 				else {
-					$cur_page = $_GET["page"] . '.php';
+					$cur_page = $_GET["page"];
+					$cur_page = str_replace($this->plugin->name.'-', '', $cur_page);
+					$cur_page .= '.php';
 				}
 				include($this->plugin->folder . 'views/modules/' . $cur_page);
 			}
