@@ -211,4 +211,62 @@ function gbtc_save_meta_box( $post_id ) {
 // https://developer.wordpress.org/reference/hooks/save_post/
 add_action( 'save_post', 'gbtc_save_meta_box' );
 
+/**
+* A function to be used by the Elements Usage Calculator for Elementor
+* @return Multi-dimensional array of post_types and posts
+*/
+function gb_calculate_elements_usage() {
+    // Initialize $allowed_post_types to empty
+    $allowed_post_types = [];
+
+    // Grab elementor_cpt_support option (Elementor -> Settings -> Post Types)
+    $elementor_cpt_support = get_option('elementor_cpt_support', []);
+
+    // Loop through all available post types and add them to $allowed_post_types if they use the Elementor builder
+    foreach(get_post_types() as $post_type) {
+        if (in_array($post_type, $elementor_cpt_support) ||
+            strpos($post_type, 'elementor_') !== false || // Default elementor CPTs (they are not included in the wp_option)
+            in_array($post_type, ['e-landing-page']) // For outliers
+        ) {
+            $allowed_post_types[] = $post_type;
+        }
+    }
+
+    // Create a WP_Query object that returns all posts that support the Elementor builder
+    $post_args = array(
+        'post_type' => $allowed_post_types,
+        'posts_per_page' => -1,
+        'orderby' => 'title',
+        'order' => 'ASC',
+    );
+    $the_query = new WP_Query( $post_args ); 
+
+    // Loop through all posts and sort them into categories based on post_type
+    if ( $the_query->have_posts() ) {
+        $output = [];
+        foreach ($the_query->posts as $p) {
+            // Ensure a category for the current post's post_type exists
+            if (!isset($output[$p->post_type]))
+                $output[$p->post_type] = [];
+
+            // Get metadata for the post so that we can detect the elements usage
+            $meta = get_post_meta($p->ID);
+
+            // Add a new entry to the post_type category for this post
+            $output[$p->post_type][] = [
+                'ID' => $p->ID,
+                'post_title' => $p->post_title,
+                'post_status' => $p->post_status,
+                'permalink' => get_the_permalink($p->ID),
+                '_elementor_controls_usage' => isset($meta['_elementor_controls_usage']) ? $meta['_elementor_controls_usage'] : false,
+            ];
+        }
+
+        // Sort output by post_type alphabetically and return
+        ksort($output);
+        return $output;
+    } else {
+        return [];
+    }
+}
 ?>
