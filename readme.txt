@@ -1,8 +1,8 @@
 === GB&bull;BOT ===
 Contributors: genbeyond
-Requires at least: 5.0.0
-Tested up to: 5.9.3
-Stable tag: 0.3.0
+Requires at least: 6.1.1
+Tested up to: 6.1.1
+Stable tag: 1.1.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -28,12 +28,15 @@ An easy way to identify all of the elements used in your Elementor-built website
 
 == Changelog ==
 
+#### 1.1.1 - 2023-02-17
+* Fixed repository URL.
+
 #### 1.1.0 - 2023-02-17
-* Added Featured Image Admin Thumbnail 
+* Added Featured Image Admin Thumbnail.
 
 #### 1.0.0 - 2023-02-17
-* Migrated GB Theme Core functionality
-* Added Normalized CSS
+* Migrated GB Theme Core functionality.
+* Added Normalized CSS.
 
 #### 0.3.0 - 2022-04-29
 * Added Tools menu and Elements Usage Calculator for Elementor.
