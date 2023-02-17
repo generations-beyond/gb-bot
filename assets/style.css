@@ -1,0 +1,79 @@
+/**
+ * GB Theme Core - style.css
+ *
+ * ATTENTION!
+ * Changes to this file will be overwritten upon updating the GB Theme Core.
+ * 
+ * This file is for global frontend styles.
+ * 
+ */
+
+/* GB footer link */
+.gb-link {
+	opacity: 0.5;
+	transition: opacity 0.2s;
+}
+.gb-link:hover {
+	opacity: 1;
+}
+.gb-link a {
+	color: inherit !important;
+}
+.gb-link a:hover {
+	color: inherit !important;
+	text-decoration: underline;
+}
+.gb-link span {
+	white-space: nowrap;
+}
+.nobreak {
+	white-space: nowrap;
+}
+
+/* Elementor/OceanWP fixes */
+.elementor-field-type-checkbox .elementor-field-subgroup .elementor-field-option input {
+	display: inline-block !important;
+}
+
+/* reCAPTCHA form field */
+.elementor-field-type-recaptcha {
+	display: flex;
+}
+.captcha-left .elementor-field-type-recaptcha {
+	justify-content: flex-start;
+}
+.captcha-center .elementor-field-type-recaptcha {
+	justify-content: center;
+}
+.captcha-right .elementor-field-type-recaptcha {
+	justify-content: flex-end;
+}
+.elementor-field-type-recaptcha > .elementor-field {
+    background-color: transparent !important;
+}
+@media (max-width: 767px) {
+	.elementor-field-type-recaptcha iframe {
+		transform: scale(0.94);
+	}
+}
+
+/* Dynamic Content Posts v2 - Fix for fading slides with no background */
+/* Requires .dce-swiper-fade-fix class */
+.dce-swiper-fade-fix .swiper-slide {
+    opacity: 0 !important;
+}
+.dce-swiper-fade-fix .swiper-slide-active:not(.swiper-slide-duplicate),
+.dce-swiper-fade-fix .swiper-slide-duplicate-active:not(.swiper-slide-duplicate) {
+    opacity: 1 !important;
+}
+
+/* Alpine.js [x-cloak] and print-specific visibility styles */
+body.elementor-editor-active .visible-on-print,
+body.elementor-editor-active [x-cloak] {
+	outline: 1px dashed red;
+	opacity: 0.8;
+}
+body:not(.elementor-editor-active) .visible-on-print,
+body:not(.elementor-editor-active) [x-cloak] {
+	display: none;
+}

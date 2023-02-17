@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 0.3.0
+* Version: 1.0.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -21,19 +21,36 @@ if (file_exists('../wp-content/plugins/gb-bot/env.php'))
 	include 'env.php';
 $gbBotUpdateChecker->setBranch(isset($gbbot_env) ? $gbbot_env : 'master'); // Set in env.php
 
-require_once('includes/functions.php' );
+global $GBTC_ACTIVE;
+$GBTC_ACTIVE = file_exists(get_stylesheet_directory().'/core/init.php');
+
+require_once("includes/functions.php");
+require_once("includes/shortcodes.php");
 
 class GBBot {
 	/**
 	* Constructor
 	*/
 	public function __construct() {
+		global $GBTC_ACTIVE;
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '0.3.0';
+		$this->plugin->version      = '1.0.0'; 
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
+
+		// Add check to see if it's the correct GBTC
+		if ( !$GBTC_ACTIVE ) {
+		// if ( true ) {
+			require_once("includes/protection.php");
+			
+			$this->initCore([
+				'gbbot_theme_dir' => $this->plugin->url,
+				'plugin_name' => $this->plugin->name,
+				'version' => $this->plugin->version,
+			]);
+		}
 
 		add_action( 'admin_init', array( &$this, 'registerSettings' ) );
 		add_action( 'wp_dashboard_setup', array( &$this, 'registerDashboardWidget' ) );
@@ -59,6 +76,42 @@ class GBBot {
 				);
 			}
 		}, 10, 2 );
+	}
+
+	/**
+	 * Init Core
+	 */
+	function initCore($plugin_info) {
+		
+		$gbbot_theme_dir = $plugin_info['gbbot_theme_dir'];
+		$plugin_name = $plugin_info['plugin_name'];
+		$version = $plugin_info['version'];
+		
+		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir)  {	
+			wp_enqueue_style($plugin_name . '-admin-styles', $gbbot_theme_dir . '/assets/admin.css');
+		});
+
+		add_action('wp_enqueue_scripts', function() use ($gbbot_theme_dir, $plugin_name, $version) {
+			wp_enqueue_style( $plugin_name . '-core-style', $gbbot_theme_dir . '/assets/style.css', array(), $version );
+		});_name, $gbbot_theme_dir) {
+			wp_enqueue_style($plugin_name . '-print-styles', $gbbot_theme_dir.'/assets/print.css', array(), false, 'print');
+			wp_enqueue_script($plugin_name . '-frontend-js', $gbbot_theme_dir.'/assets/frontend.js', array('jquery'));
+
+
+		// Enqueue additional JS/CSS
+		add_action( 'wp_enqueue_scripts', function() use ($plugin
+			// AlpineJS
+			if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
+				wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
+			}
+		});
+		// AlpineJS script defer
+		add_filter('script_loader_tag', function ($tag, $handle) {
+			if ($handle === 'gb-alpinejs') {
+				$tag = str_replace("src=", "defer src=", $tag);
+			}
+			return $tag;
+		}, 10, 2);
 	}
 
 	/**
@@ -99,7 +152,7 @@ class GBBot {
 	*/
 	function renderAdminPanel() {
 		// only admin user can access this page
-		if ( !current_user_can( 'administrator' ) ) {
+		if ( !current_user_can( 'level_10' ) ) {
 			echo '<p>' . __( 'Sorry, you are not allowed to access this page.', 'gb-bot' ) . '</p>';
 			return;
 		}

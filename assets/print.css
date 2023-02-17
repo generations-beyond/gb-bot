@@ -1,0 +1,18 @@
+/**
+ * GB Theme Core - print.css
+ *
+ * ATTENTION!
+ * Changes to this file will be overwritten upon updating the GB Theme Core.
+ * 
+ * This file is intended for custom print-specific CSS.
+ * 
+ */
+
+.hidden-on-print,
+.acsb-trigger,
+body .acsb-trigger.acsb-ready {
+	display: none !important;
+}
+.visible-on-print {
+	display: block !important;
+}
