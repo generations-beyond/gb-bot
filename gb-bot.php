@@ -13,7 +13,7 @@
 // Plugin Update Checker Support
 require 'plugin-update-checker/plugin-update-checker.php';
 $gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/generations-beyond/gb-bot.git',
+	'https://github.com/generations-beyond/gb-bot/',
 	__FILE__,
 	'gb-bot'
 );
