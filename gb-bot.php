@@ -36,7 +36,7 @@ class GBBot {
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '1.0.0'; 
+		$this->plugin->version      = '1.0.0';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
@@ -93,13 +93,13 @@ class GBBot {
 
 		add_action('wp_enqueue_scripts', function() use ($gbbot_theme_dir, $plugin_name, $version) {
 			wp_enqueue_style( $plugin_name . '-core-style', $gbbot_theme_dir . '/assets/style.css', array(), $version );
-		});_name, $gbbot_theme_dir) {
+		});
+
+		// Enqueue additional JS/CSS
+		add_action( 'wp_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir) {
 			wp_enqueue_style($plugin_name . '-print-styles', $gbbot_theme_dir.'/assets/print.css', array(), false, 'print');
 			wp_enqueue_script($plugin_name . '-frontend-js', $gbbot_theme_dir.'/assets/frontend.js', array('jquery'));
 
-
-		// Enqueue additional JS/CSS
-		add_action( 'wp_enqueue_scripts', function() use ($plugin
 			// AlpineJS
 			if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
 				wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
