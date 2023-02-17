@@ -375,11 +375,8 @@ if( !$GBTC_ACTIVE ) {
      */
     add_filter('manage_posts_columns', 'gb_add_image_column_to_post_type', 10, 2);
     function gb_add_image_column_to_post_type($post_columns, $post_type) {
-        global $GBTC_FEATURED_IMAGE_POST_TYPES;
-        $allowed_types = ['team','team_member','team_members']; // Array of post type slugs that will display images
-        if (isset($GBTC_FEATURED_IMAGE_POST_TYPES) && is_array($GBTC_FEATURED_IMAGE_POST_TYPES))
-            $allowed_types = array_merge($allowed_types, $GBTC_FEATURED_IMAGE_POST_TYPES);
-        if (in_array($post_type, $allowed_types)) {
+        $enabled_post_types = get_option('gbbot_featured_image_post_types');
+        if (in_array($post_type, $enabled_post_types)) {
             $post_columns = array_slice($post_columns, 0, 1, true) +
                             array('image' => __( 'Image', 'Image of the post' )) +
                             array_slice($post_columns, 1, NULL, true);

@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 1.0.0
+* Version: 1.1.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -13,7 +13,7 @@
 // Plugin Update Checker Support
 require 'plugin-update-checker/plugin-update-checker.php';
 $gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://bitbucket.org/generationsbeyond/gb-bot',
+	'https://github.com/generations-beyond/gb-bot.git',
 	__FILE__,
 	'gb-bot'
 );
@@ -36,7 +36,7 @@ class GBBot {
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '1.0.0';
+		$this->plugin->version      = '1.1.0';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
@@ -183,6 +183,9 @@ class GBBot {
 						update_option( 'gbbot_team_cpt_enable', $_REQUEST['gbbot_team_cpt_enable'] );
 						update_option( 'gbbot_team_post_label', $_REQUEST['gbbot_team_post_label'] );
 						update_option( 'gbbot_team_post_type', $_REQUEST['gbbot_team_post_type'] );
+
+						update_option( 'gbbot_featured_image_post_types', $_REQUEST['gbbot_featured_image_post_types'] );
+
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
 						break;
 
