@@ -28,6 +28,10 @@ An easy way to identify all of the elements used in your Elementor-built website
 
 == Changelog ==
 
+#### 1.0.0 - 2023-02-17
+* Migrated GB Theme Core functionality
+* Added Normalized CSS
+
 #### 0.3.0 - 2022-04-29
 * Added Tools menu and Elements Usage Calculator for Elementor.
 

@@ -42,9 +42,7 @@ class GBBot {
 
 		// Add check to see if it's the correct GBTC
 		if ( !$GBTC_ACTIVE ) {
-		// if ( true ) {
 			require_once("includes/protection.php");
-			
 			$this->initCore([
 				'gbbot_theme_dir' => $this->plugin->url,
 				'plugin_name' => $this->plugin->name,
@@ -86,7 +84,7 @@ class GBBot {
 		$gbbot_theme_dir = $plugin_info['gbbot_theme_dir'];
 		$plugin_name = $plugin_info['plugin_name'];
 		$version = $plugin_info['version'];
-		
+
 		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir)  {	
 			wp_enqueue_style($plugin_name . '-admin-styles', $gbbot_theme_dir . '/assets/admin.css');
 		});
@@ -97,14 +95,16 @@ class GBBot {
 
 		// Enqueue additional JS/CSS
 		add_action( 'wp_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir) {
+			wp_enqueue_style($plugin_name . '-normalize-styles', $gbbot_theme_dir.'/assets/normalize.css', array(), false);
 			wp_enqueue_style($plugin_name . '-print-styles', $gbbot_theme_dir.'/assets/print.css', array(), false, 'print');
 			wp_enqueue_script($plugin_name . '-frontend-js', $gbbot_theme_dir.'/assets/frontend.js', array('jquery'));
-
+			
 			// AlpineJS
 			if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
 				wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
 			}
 		});
+
 		// AlpineJS script defer
 		add_filter('script_loader_tag', function ($tag, $handle) {
 			if ($handle === 'gb-alpinejs') {
@@ -112,6 +112,13 @@ class GBBot {
 			}
 			return $tag;
 		}, 10, 2);
+
+		// Add empty page parent template
+		add_filter( 'theme_page_templates', function() {
+			$templates[plugin_dir_path( __FILE__ ) . 'templates/empty-parent-page.php'] = __( 'Empty Parent Page', 'gb-bot' );
+			return $templates;
+		} );
+
 	}
 
 	/**
