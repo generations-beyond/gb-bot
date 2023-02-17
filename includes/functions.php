@@ -1,4 +1,8 @@
 <?php 
+
+if ( ! function_exists( 'is_plugin_active' ) )
+	require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+
 /*
 *Team Post type options
 */
@@ -268,5 +272,293 @@ function gb_calculate_elements_usage() {
     } else {
         return [];
     }
+}
+
+// Taxonomy: Page Categories
+add_action( 'init', function () {
+    $labels = array(
+		"name" => __( "Page Categories", "gb-ocean-child" ),
+		"singular_name" => __( "Page Category", "gb-ocean-child" ),
+		"menu_name" => __( "Categories", "gb-ocean-child" ),
+	);
+	$args = array(
+		"label" => __( "Page Categories", "gb-ocean-child" ),
+		"labels" => $labels,
+		"public" => true,
+		"publicly_queryable" => false,
+		"hierarchical" => true,
+		"show_ui" => true,
+		"show_in_menu" => true,
+		"show_in_nav_menus" => true,
+		"query_var" => true,
+		"rewrite" => array( 'slug' => 'page_categories', 'with_front' => true, ),
+		"show_admin_column" => true,
+		"show_in_rest" => true,
+		"rest_base" => "page_categories",
+		"rest_controller_class" => "WP_REST_Terms_Controller",
+		"show_in_quick_edit" => true,
+		);
+	register_taxonomy( "page_categories", array( "page" ), $args );
+});
+
+// Remove links in nav with href="#"
+add_filter( 'wp_nav_menu_items', function ( $menu ) {
+    return str_replace( '<a href="#"', '<a style="cursor:pointer"', $menu );
+} );
+
+// Prevent certain email addresses from being able to submit forms
+add_action( 'elementor_pro/forms/validation/email', function( $field, $record, $ajax_handler ) {
+	$spamemails = array(
+		"ericjonesonline@outlook.com",
+		"eric@talkwithwebvisitor.com",
+		"eric.jones.z.mail@gmail.com",
+		"eric@talkwithcustomer.com",
+	);
+	if ( in_array( $field['value'] , $spamemails) ) {
+		$ajax_handler->add_error( $field['id'], 'We do not like spam, try another email address.' );
+	}
+}, 10, 3 );
+
+// Prevent lesser users from creating higher users
+add_filter('editable_roles', 'remove_higher_levels');
+function remove_higher_levels($all_roles) {
+    $user = wp_get_current_user();
+    $next_level = 'level_' . ($user->user_level + 1);
+	if( !in_array('gb_admin',$user->roles ) ) {
+		foreach ( $all_roles as $name => $role ) {
+			if (isset($role['capabilities'][$next_level]) || $name == 'gb_admin') {
+				unset($all_roles[$name]);
+			}
+		}
+	}
+    return $all_roles;
+}
+
+// Rank Math check
+if( is_plugin_active('seo-by-rank-math/rank-math.php') ) {
+    /**
+     * Fix Rank Math issue where it doesn't use the default 
+     * OpenGraph image if another image exists on the page
+     */
+    add_filter('rank_math/opengraph/pre_set_content_image', function() {
+        return true;
+    });
+    
+    /**
+     * Change the Rank Math Metabox Priority
+     * @param array $priority Metabox Priority.
+     */
+    add_filter( 'rank_math/metabox/priority', function( $priority ) {
+        return 'low';
+    });
+}
+
+// Add following functions only if GBTC is inactive
+if( !$GBTC_ACTIVE ) {
+
+    /**
+     * Add a post display state for special pages in the page list table.
+     *
+     * @param array   $post_states An array of post display states.
+     * @param WP_Post $post        The current post object.
+     */
+    add_filter( 'display_post_states', 'gb_add_display_post_states', 10, 2 );
+    function gb_add_display_post_states( $post_states, $post ) {
+        if ( get_post_meta($post->ID,'_wp_page_template',true) === 'page-parent.php' ) {
+            $post_states['gb_empty_parent'] = __( 'Empty Parent Page' );
+        }
+        return $post_states;
+    }
+
+    /**
+     * Display Featured Image in lists for certain Post Types
+     */
+    add_filter('manage_posts_columns', 'gb_add_image_column_to_post_type', 10, 2);
+    function gb_add_image_column_to_post_type($post_columns, $post_type) {
+        $enabled_post_types = get_option('gbbot_featured_image_post_types');
+        if (in_array($post_type, $enabled_post_types)) {
+            $post_columns = array_slice($post_columns, 0, 1, true) +
+                            array('image' => __( 'Image', 'Image of the post' )) +
+                            array_slice($post_columns, 1, NULL, true);
+        }
+        return $post_columns;
+    }
+
+    add_action('manage_posts_custom_column', 'gb_display_posts_featured_image', 10, 2);
+    function gb_display_posts_featured_image($column, $post_id) {
+        if ($column == 'image') {
+            $image = get_the_post_thumbnail_url($post_id, "thumbnail");
+            if ($image == "")
+                $image = plugin_dir_url( __FILE__ ) .'../assets/no-image.png';
+            echo '<img src=' . $image . ' style="max-height:100px;max-width:100px;height:auto;width:auto;">';
+        }
+    }
+
+    /**
+    * Get categories from a specific taxonomy
+    * @param $cat_taxonomy - (required) slug of the category taxonomy
+    * @param @args - (optional) arguments for category query
+    * @return WP_Term Object - from get_categories() https://developer.wordpress.org/reference/functions/get_category/
+    * 	or False - if no $cat_taxonomy provided or no categories found.
+    */
+    function gb_get_taxonomy( $cat_taxonomy = false, $args = [] ) {
+        // Exit if no taxonomy is given
+        if ( !$cat_taxonomy )
+            return false;
+        $cat_args = array(
+        'taxonomy' => $cat_taxonomy,
+        'orderby' => 'name',
+        'order'   => 'ASC',
+        'hide_empty' => false,
+        'number' => 0
+        );
+        $cat_args = array_merge($cat_args, $args);
+        $cats = get_categories($cat_args);
+        if ( $cats )
+            return $cats;
+        else
+            return false;
+    }
+
+    /**
+    * Gets either the WP_Query Object or WP_Post Object
+    * @param $post_type - (required) slug of the post type
+    * @param $args - (optional) array of query arguments
+    * @param $rt_query - (optional) false returns the WP_Post Object, true returns the WP_Query Object 
+    * @return WP_Post Object - if $rt_query is false https://developer.wordpress.org/reference/classes/wp_post/
+    * 	or WP_Query - if no $rt_query is true https://developer.wordpress.org/reference/classes/wp_query/
+    * 	or False - if no $post_type provided or no posts found.
+    */
+    function gb_get_posts( $post_type = false, $args = [], $rt_query = false ) {
+        // Exit if no $post_type given
+        if ( !$post_type )
+            return false;
+        $post_args = array(
+            'post_type' => $post_type,
+            'post_status' => 'publish',
+            'posts_per_page' => 0,
+            'orderby' => 'title',
+            'order' => 'ASC',
+        );
+        $post_args = array_merge( $post_args, $args );
+        $the_query = new WP_Query( $post_args ); 
+        if ( $the_query->have_posts() ) : 
+            if ( $rt_query )
+                return $the_query;
+            else
+                return $the_query->posts;
+        else :
+            return false;
+        endif;
+    }
+
+    /**
+    * Get a limited part of the content - sans html tags and shortcodes - 
+    * according to the amount written in $limit. Make sure words aren't cut in the middle
+    * @param $the_content - (required) post content or string to be shortened
+    * @param $limit - (optional) number of characters
+    * @param $ending - (optional) character at the end of the shortened character, defaults to ellipse
+    * @return string - the shortened content
+    */
+    function gb_the_short_content($the_content, $limit = 150, $ending = '&#8230') {
+        $content = $the_content;
+        // sometimes there are <p> tags that separate the words, and when the tags are removed, 
+        // words from adjoining paragraphs stick together.
+        // so replace the end <p> tags with space, to ensure unstickiness of words
+        $content = strip_tags($content);
+        $content = strip_shortcodes($content);
+        $content = trim(preg_replace('/\s+/', ' ', $content));
+        $ret = $content;
+        // if the limit is more than the length, this will be returned
+        if (mb_strlen($content) >= $limit) {
+            $ret = mb_substr($content, 0, $limit);
+            // make sure not to cut the words in the middle:
+            // 1. first check if the substring already ends with a space
+            if (mb_substr($ret, -1) !== ' ') {
+                // 2. If it doesn't, find the last space before the end of the string
+                $space_pos_in_substr = mb_strrpos($ret, ' ');
+                // 3. then find the next space after the end of the string (using the original string)
+                $space_pos_in_content = mb_strpos($content, ' ', $limit);
+                // 4. now compare the distance of each space position from the limit
+                if ($space_pos_in_content != false && $space_pos_in_content - $limit <= $limit - $space_pos_in_substr) {
+                    // if the closest space is in the original string, take the substring from there
+                    $ret = mb_substr($content, 0, $space_pos_in_content);
+                } else {
+                    // else take the substring from the original string, but with the earlier (space) position
+                    $ret = mb_substr($content, 0, $space_pos_in_substr);
+                }
+            }
+        }
+        return $ret . $ending;
+    }
+
+    // Add Alpine.js attribute options to every Elementor Pro widget
+    if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
+        add_action('elementor/element/before_section_end', function( $section, $section_id, $args ) {
+            if( $section_id == '_section_attributes' ){
+                $repeater = new \Elementor\Repeater();
+                $repeater->add_control(
+                    'alpine_attribute_name', [
+                        'label' => __( 'Name', 'gb-alpine' ),
+                        'type' => \Elementor\Controls_Manager::TEXT,
+                        'placeholder' => __( 'Attribute name', 'gb-alpine' ),
+                        'label_block' => true,
+                    ]
+                );
+                $repeater->add_control(
+                    'alpine_attribute_value',
+                    [
+                        'label' => __( 'Value', 'gb-alpine' ),
+                        'type' => \Elementor\Controls_Manager::TEXTAREA,
+                        'dynamic' => [
+                            'active' => true,
+                        ],
+                        'placeholder' => __( '', 'gb-alpine' ),
+                        'rows' => 10,
+                    ]
+                );
+                $section->add_control(
+                    'list_alpine_attributes',
+                    [
+                        'label' => __( 'Alpine.js Attributes', 'gb-alpine' ),
+                        'type' => \Elementor\Controls_Manager::REPEATER,
+                        'fields' => $repeater->get_controls(),
+                        'default' => [],
+                        'prevent_empty' => false,
+                        'title_field' => '{{{ alpine_attribute_name }}}',
+                    ]
+                );
+            }
+        }, 10, 3 );
+
+        function gb_render_alpine_atts($section, $widget = false) {
+            $element = $widget ?: $section;
+            $settings = $element->get_settings();
+            if(!empty($settings['list_alpine_attributes']) && $settings['list_alpine_attributes'][0]['alpine_attribute_name'] !== '' ) {
+                foreach ($settings['list_alpine_attributes'] as $attItem) {
+                    $element->add_render_attribute( '_wrapper', [
+                        $attItem['alpine_attribute_name'] => do_shortcode($attItem['alpine_attribute_value']),
+                    ] );
+                }
+            }
+            // return content for widgets
+            if($widget) {
+                return $section;
+            }
+        }
+
+        add_action( 'elementor/frontend/section/before_render', 'gb_render_alpine_atts', 10, 1 ); //params: section
+        add_action( 'elementor/frontend/column/before_render', 'gb_render_alpine_atts', 10, 1 ); //params: column
+        add_action( 'elementor/frontend/container/before_render', 'gb_render_alpine_atts', 10, 1 ); //params: container
+        add_action( 'elementor/widget/render_content', 'gb_render_alpine_atts', 10, 2 ); //params: content, widget
+    }
+
+} else {
+    // Deregister OceanWP's image lightbox scripts so we don't get double lightbox issues
+    add_action( 'wp_enqueue_scripts', function() {
+        wp_deregister_script('magnific-popup');
+        wp_deregister_script('oceanwp-lightbox');
+        wp_deregister_style('magnific-popup');
+    }, 99);
 }
 ?>

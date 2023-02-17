@@ -1,0 +1,43 @@
+/**
+ * GB Theme Core - protection.css
+ *
+ * ATTENTION!
+ * Changes to this file will be overwritten upon updating the GB Theme Core.
+ * 
+ * This file is intended to hide some developer options from the eyes of the average user to prevent accidental damage to the website.
+ * 
+ */
+
+/* Misc */
+.update-nag.dpro-admin-notice {
+	display: none !important;
+}
+
+/* SimpleHistory */
+#simple_history_dashboard_widget,
+a[href$="page=simple_history_page"],
+a[href$="page=simple_history_settings_menu_slug"],
+.wp-list-table.plugins tr[data-slug="simple-history"],
+.plugin-card.plugin-card-simple-history {
+	display: none !important;
+}
+
+/* Must-Use Plugins */
+ul.subsubsub .mustuse {
+	display: none !important;
+}
+
+/* InfiniteWP */
+.iwp_mmb-slave-info,
+.wp-list-table.plugins tr[data-slug="iwp-client"],
+.wp-list-table.plugins tr[data-slug="infinitewp-client-loader"],
+.plugin-card.plugin-card-iwp-client {
+	display: none !important;
+}
+
+/* ManageWP */
+.wp-list-table.plugins tr[data-slug="worker"],
+.wp-list-table.plugins tr[data-slug="managewp-worker-loader"],
+.plugin-card.plugin-card-worker {
+	display: none !important;
+}
