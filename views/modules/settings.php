@@ -48,7 +48,7 @@
 							<td>
 								<?php 
 									$post_types = get_post_types( [], 'objects');
-									$enabled_post_types = get_option('gbbot_featured_image_post_types');
+									$enabled_post_types = get_option('gbbot_featured_image_post_types', []);
 									foreach ($post_types as $post_type) :
 										if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
 											?>
