@@ -7,7 +7,7 @@ if ( ! function_exists( 'is_plugin_active' ) )
 *Team Post type options
 */
 function gbbot_cpt_settings($option) {
-    $gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable');
+    $gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable', false);
     $gbbot_team_post_label = !empty(get_option('gbbot_team_post_label')) ? get_option('gbbot_team_post_label') : 'Team';
     $gbbot_team_post_type = !empty(get_option('gbbot_team_post_type')) ? get_option('gbbot_team_post_type') : 'team_member';
 
@@ -375,7 +375,7 @@ if( !$GBTC_ACTIVE ) {
      */
     add_filter('manage_posts_columns', 'gb_add_image_column_to_post_type', 10, 2);
     function gb_add_image_column_to_post_type($post_columns, $post_type) {
-        $enabled_post_types = get_option('gbbot_featured_image_post_types');
+        $enabled_post_types = get_option('gbbot_featured_image_post_types', []);
         if (in_array($post_type, $enabled_post_types)) {
             $post_columns = array_slice($post_columns, 0, 1, true) +
                             array('image' => __( 'Image', 'Image of the post' )) +
