@@ -53,7 +53,7 @@
 										if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
 											?>
 												<label>
-													<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, $enabled_post_types) ? 'checked' : '' ?>>
+													<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, ($enabled_post_types ?: [])) ? 'checked' : '' ?>>
 													<?=$post_type->label?>
 												</label><br>
 											<?php
