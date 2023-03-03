@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 1.1.4
+* Version: 1.1.5
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -36,7 +36,7 @@ class GBBot {
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '1.1.4';
+		$this->plugin->version      = '1.1.5';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
@@ -100,8 +100,10 @@ class GBBot {
 			wp_enqueue_script($plugin_name . '-frontend-js', $gbbot_theme_dir.'/assets/frontend.js', array('jquery'));
 			
 			// AlpineJS
-			if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
-				wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
+			if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
+				if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
+					wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
+				}
 			}
 		});
 
