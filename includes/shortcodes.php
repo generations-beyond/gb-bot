@@ -1,10 +1,7 @@
 <?php
 /**
- * GB Theme Core - shortcodes.php
+ * GB•BOT - shortcodes.php
  *
- * ATTENTION!
- * Changes to this file will be overwritten upon updating the GB Theme Core.
- * 
  * Global custom shortcodes go here.
  * 
  */
@@ -24,4 +21,5 @@ if( !$GBTC_ACTIVE ) {
 		return '<span class="gb-link"><a href="https://generationsbeyond.com/" rel="nofollow" target="_blank">Responsive Web Design</a> by <span>Generations Beyond</span></span>';
 	}
 	add_shortcode('gblink', 'gblink_function');
+	add_shortcode('gb_link', 'gblink_function');
 }

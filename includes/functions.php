@@ -76,11 +76,11 @@ function gbbot_register_cpt() {
 /**
  * Register meta box(es).
  */
-function gbtc_cpt_register_meta_boxes() {
+function gbbot_cpt_register_meta_boxes() {
     $post_label = gbbot_cpt_settings("label");
     $post_type = gbbot_cpt_settings("type");
     
-    add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbtc_team_details_display_callback', $post_type );
+    add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbbot_team_details_display_callback', $post_type );
 }
 
 /**
@@ -88,7 +88,7 @@ function gbtc_cpt_register_meta_boxes() {
  *
  * @param WP_Post $post Current post object.
  */
-function gbtc_team_details_display_callback( $post ) {
+function gbbot_team_details_display_callback( $post ) {
     // # Display code/markup goes here. Don't forget to include nonces!
 
     // Get settings
@@ -123,7 +123,7 @@ function gbtc_team_details_display_callback( $post ) {
  *
  * @param int $post_id Post ID
  */
-function gbtc_save_meta_box( $post_id ) {
+function gbbot_save_meta_box( $post_id ) {
     /** 
      * # security check
      * 
@@ -213,7 +213,7 @@ function gbtc_save_meta_box( $post_id ) {
     // You don't need to delete the meta field manually.
 }
 // https://developer.wordpress.org/reference/hooks/save_post/
-add_action( 'save_post', 'gbtc_save_meta_box' );
+add_action( 'save_post', 'gbbot_save_meta_box' );
 
 /**
 * A function to be used by the Elements Usage Calculator for Elementor
