@@ -76,11 +76,11 @@ function gbbot_register_cpt() {
 /**
  * Register meta box(es).
  */
-function gbtc_cpt_register_meta_boxes() {
+function gbbot_cpt_register_meta_boxes() {
     $post_label = gbbot_cpt_settings("label");
     $post_type = gbbot_cpt_settings("type");
     
-    add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbtc_team_details_display_callback', $post_type );
+    add_meta_box( $post_type.'-details-group', $post_label." Details", 'gbbot_team_details_display_callback', $post_type );
 }
 
 /**
@@ -88,7 +88,7 @@ function gbtc_cpt_register_meta_boxes() {
  *
  * @param WP_Post $post Current post object.
  */
-function gbtc_team_details_display_callback( $post ) {
+function gbbot_team_details_display_callback( $post ) {
     // # Display code/markup goes here. Don't forget to include nonces!
 
     // Get settings
@@ -123,7 +123,7 @@ function gbtc_team_details_display_callback( $post ) {
  *
  * @param int $post_id Post ID
  */
-function gbtc_save_meta_box( $post_id ) {
+function gbbot_save_meta_box( $post_id ) {
     /** 
      * # security check
      * 
@@ -213,7 +213,7 @@ function gbtc_save_meta_box( $post_id ) {
     // You don't need to delete the meta field manually.
 }
 // https://developer.wordpress.org/reference/hooks/save_post/
-add_action( 'save_post', 'gbtc_save_meta_box' );
+add_action( 'save_post', 'gbbot_save_meta_box' );
 
 /**
 * A function to be used by the Elements Usage Calculator for Elementor
@@ -490,6 +490,31 @@ if( !$GBTC_ACTIVE ) {
             }
         }
         return $ret . $ending;
+    }
+
+    // Check if the return to top option is enabled
+    $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right');
+    if( $gbbot_enable_return_to_top !== 'none' ) {
+        add_action('wp_footer', function() use ($gbbot_enable_return_to_top) { ?>
+            <a aria-label="Scroll to the top of the page" href="#" id="scroll-top" class="scroll-top <?=$gbbot_enable_return_to_top?>"
+                x-data="{
+                    topCheck() {
+                        if ( window.scrollY ){
+                            $refs.scroll_top.style.opacity = 1
+                            $refs.scroll_top.style.pointerEvents = 'auto'
+                        } else {
+                            $refs.scroll_top.style.opacity = 0
+                            $refs.scroll_top.style.pointerEvents = 'none'
+                        }
+                    }
+                }"
+                x-ref="scroll_top"
+                x-init="topCheck()"
+                @scroll.window="topCheck()"
+                @click.prevent="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M201.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 173.3 54.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+            </a>
+        <?php });
     }
 
     // Add Alpine.js attribute options to every Elementor Pro widget

@@ -36,36 +36,74 @@
 					</tbody>
 				</table>
 			</div>
-			<h3 class="hndle">Featured Image Admin Thumbnail</h3>
-			<div class="inside">
-				<p>
-					Adds inline image thumbnails to admin columns for the selected post types.
-				</p>
-				<table class="form-table">
-					<tbody>
-						<tr>
-							<th scope="row">Post Types:</th>
-							<td>
-								<?php 
-									$post_types = get_post_types( [], 'objects');
-									$enabled_post_types = get_option('gbbot_featured_image_post_types', []);
-									foreach ($post_types as $post_type) :
-										if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
-											?>
-												<label>
-													<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, ($enabled_post_types ?: [])) ? 'checked' : '' ?>>
-													<?=$post_type->label?>
-												</label><br>
-											<?php
-										endif;
-									endforeach;
-								?>
-							</td>
-						</tr>
-						
-					</tbody>
-				</table>
-			</div>
+			<?php if($GBTC_ACTIVE) : ?>
+				<h3>GBTC Detected</h3>
+				<div class="inside">
+					<p>
+						<strong>Notice</strong>: GBTC is currently active. To get the most features out of GB Bot install and enable the GB Proactive Theme.
+					</p>
+				</div>
+			<?php else : ?>
+				<h3>Featured Image Admin Thumbnail</h3>
+				<div class="inside">
+					<p>
+						Adds inline image thumbnails to admin columns for the selected post types.
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Post Types:</th>
+								<td>
+									<?php 
+										$post_types = get_post_types( [], 'objects');
+										$enabled_post_types = get_option('gbbot_featured_image_post_types', []);
+										foreach ($post_types as $post_type) :
+											if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
+												?>
+													<label>
+														<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, ($enabled_post_types ?: [])) ? 'checked' : '' ?>>
+														<?=$post_type->label?>
+													</label><br>
+													<?php
+											endif;
+										endforeach;
+										?>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+				<?php $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right'); ?>
+				<h3>Enable Back to Top arrow</h3>
+				<div class="inside">
+					<p>
+						Adds an icon on the bottom of the site that returns to the top
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Location:</th>
+								<td>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?=$gbbot_enable_return_to_top == 'bottom_right'?'checked':''?> > 
+										Bottom Right
+									</label><br>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='bottom_left' <?=$gbbot_enable_return_to_top == 'bottom_left'?'checked':''?> > 
+										Bottom Left
+									</label><br>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='none' <?=$gbbot_enable_return_to_top == 'none'?'checked':''?> > 
+										None (disabled)
+									</label>
+								</td>
+							</tr>
+							
+						</tbody>
+					</table>
+				</div>
+			<?php endif; ?>
 		</div>
 
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>

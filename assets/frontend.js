@@ -1,9 +1,6 @@
 /**
- * GB Theme Core - frontend.js
+ * GB•BOT - frontend.js
  *
- * ATTENTION!
- * Changes to this file will be overwritten upon updating the GB Theme Core.
- * 
  * This file is for global frontend javascript.
  * 
  */
