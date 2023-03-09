@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 1.1.5
+* Version: 1.2.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -33,10 +33,11 @@ class GBBot {
 	*/
 	public function __construct() {
 		global $GBTC_ACTIVE;
+
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '1.1.5';
+		$this->plugin->version      = '1.2.0';
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
@@ -160,6 +161,8 @@ class GBBot {
 	* Save POSTed data from the Administration Panel into a WordPress option
 	*/
 	function renderAdminPanel() {
+		global $GBTC_ACTIVE;
+
 		// only admin user can access this page
 		if ( !current_user_can( 'level_10' ) ) {
 			echo '<p>' . __( 'Sorry, you are not allowed to access this page.', 'gb-bot' ) . '</p>';
@@ -182,11 +185,16 @@ class GBBot {
 				$page = $_GET['page'];
 				switch ($page) {
 					case $this->plugin->name:
+						// For Team CPT
 						update_option( 'gbbot_team_cpt_enable', ($_REQUEST['gbbot_team_cpt_enable'] ?? false) );
 						update_option( 'gbbot_team_post_label', $_REQUEST['gbbot_team_post_label'] );
 						update_option( 'gbbot_team_post_type', $_REQUEST['gbbot_team_post_type'] );
 
+						// Featured image 
 						update_option( 'gbbot_featured_image_post_types', ($_REQUEST['gbbot_featured_image_post_types'] ?? '') );
+
+						// Return to top arrow
+						update_option( 'gbbot_enable_return_to_top', ($_REQUEST['gbbot_enable_return_to_top'] ?? '') );
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
 						break;

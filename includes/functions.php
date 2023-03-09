@@ -492,6 +492,31 @@ if( !$GBTC_ACTIVE ) {
         return $ret . $ending;
     }
 
+    // Check if the return to top option is enabled
+    $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right');
+    if( $gbbot_enable_return_to_top !== 'none' ) {
+        add_action('wp_footer', function() use ($gbbot_enable_return_to_top) { ?>
+            <a aria-label="Scroll to the top of the page" href="#" id="scroll-top" class="scroll-top <?=$gbbot_enable_return_to_top?>"
+                x-data="{
+                    topCheck() {
+                        if ( window.scrollY ){
+                            $refs.scroll_top.style.opacity = 1
+                            $refs.scroll_top.style.pointerEvents = 'auto'
+                        } else {
+                            $refs.scroll_top.style.opacity = 0
+                            $refs.scroll_top.style.pointerEvents = 'none'
+                        }
+                    }
+                }"
+                x-ref="scroll_top"
+                x-init="topCheck()"
+                @scroll.window="topCheck()"
+                @click.prevent="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <svg fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. --><path d="M201.4 105.4c12.5-12.5 32.8-12.5 45.3 0l192 192c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L224 173.3 54.6 342.6c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3l192-192z"/></svg>
+            </a>
+        <?php });
+    }
+
     // Add Alpine.js attribute options to every Elementor Pro widget
     if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
         add_action('elementor/element/before_section_end', function( $section, $section_id, $args ) {
