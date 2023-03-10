@@ -36,14 +36,18 @@
 					</tbody>
 				</table>
 			</div>
-			<?php if($GBTC_ACTIVE) : ?>
+		</div>
+		<?php if($GBTC_ACTIVE) : ?>
+			<div class="postbox">
 				<h3>GBTC Detected</h3>
 				<div class="inside">
 					<p>
 						<strong>Notice</strong>: GBTC is currently active. To get the most features out of GB Bot install and enable the GB Proactive Theme.
 					</p>
 				</div>
-			<?php else : ?>
+			</div>
+		<?php else : ?>
+			<div class="postbox">
 				<h3>Featured Image Admin Thumbnail</h3>
 				<div class="inside">
 					<p>
@@ -74,6 +78,8 @@
 						</tbody>
 					</table>
 				</div>
+			</div>
+			<div class="postbox">
 				<?php $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right'); ?>
 				<h3>Enable Back to Top arrow</h3>
 				<div class="inside">
@@ -103,8 +109,8 @@
 						</tbody>
 					</table>
 				</div>
-			<?php endif; ?>
-		</div>
+			</div>
+		<?php endif; ?>
 
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>
 	</div>
