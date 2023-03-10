@@ -4,7 +4,7 @@ mix.env(process.env.ENV_FILE);
 
 const homedir = require('os').homedir();
 const domain = process.env.DOMAIN;
-const useHTTPS = process.env.USEHTTPS;
+const useHTTPS = process.env.USEHTTPS === "true";
 
 mix.js('src/scripts/frontend.js', 'assets/scripts');
 mix.sass('src/scss/main.scss', 'assets/styles');
