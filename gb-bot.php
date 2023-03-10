@@ -186,7 +186,7 @@ class GBBot {
 						update_option( 'gbbot_team_post_type', $_REQUEST['gbbot_team_post_type'] );
 
 						// Featured image 
-						update_option( 'gbbot_featured_image_post_types', ($_REQUEST['gbbot_featured_image_post_types'] ?? '') );
+						update_option( 'gbbot_featured_image_post_types', ($_REQUEST['gbbot_featured_image_post_types'] ?? []) );
 
 						// Return to top arrow
 						update_option( 'gbbot_enable_return_to_top', ($_REQUEST['gbbot_enable_return_to_top'] ?? '') );
