@@ -18,7 +18,7 @@ function GBBOT_PROTECTION_INIT() {
 					"WHERE 1=1 AND {$wpdb->users}.user_login NOT IN ('".implode("','",$GBBOT_ALLOWED_USERS)."')",$user_search->query_where);
 		});
 		add_action('admin_enqueue_scripts', function() {
-			wp_enqueue_style('gb-protection-styles', WP_PLUGIN_DIR . '/gb-bot/assets/protection.css');
+			wp_enqueue_style('gb-protection-styles', WP_PLUGIN_DIR . '/gb-bot/assets/styles/protection.css');
 		});
 	}
 }

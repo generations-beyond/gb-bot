@@ -84,16 +84,14 @@ class GBBot {
 
 		// Enqueue backend JS/CSS
 		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir, $version)  {	
-			wp_enqueue_style($plugin_name . '-admin', $gbbot_theme_dir . 'assets/admin.css', array(), $version);
+			wp_enqueue_style($plugin_name . '-admin', $gbbot_theme_dir . 'assets/styles/admin.css', array(), $version);
 		});
 
 		// Enqueue frontend JS/CSS
 		add_action('wp_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir, $version) {
-			wp_enqueue_style($plugin_name . '-normalize', $gbbot_theme_dir.'assets/normalize.css', array(), $version);
-			wp_enqueue_style($plugin_name . '-core', $gbbot_theme_dir . 'assets/style.css', array(), $version);
-			wp_enqueue_style($plugin_name . '-print', $gbbot_theme_dir.'assets/print.css', array(), $version, 'print');
+			wp_enqueue_style($plugin_name . '-styles', $gbbot_theme_dir.'assets/styles/main.css', array(), $version);
 			
-			wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir.'assets/frontend.js', array('jquery'), $version);
+			wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir.'assets/scripts/frontend.js', array('jquery'), $version);
 			
 			// AlpineJS
 			if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
