@@ -86,24 +86,23 @@ class GBBot {
 		$plugin_name = $plugin_info['plugin_name'];
 		$version = $plugin_info['version'];
 
-		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir)  {	
-			wp_enqueue_style($plugin_name . '-admin-styles', $gbbot_theme_dir . '/assets/admin.css');
+		// Enqueue backend JS/CSS
+		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir, $version)  {	
+			wp_enqueue_style($plugin_name . '-admin', $gbbot_theme_dir . 'assets/admin.css', array(), $version);
 		});
 
-		add_action('wp_enqueue_scripts', function() use ($gbbot_theme_dir, $plugin_name, $version) {
-			wp_enqueue_style( $plugin_name . '-core-style', $gbbot_theme_dir . '/assets/style.css', array(), $version );
-		});
-
-		// Enqueue additional JS/CSS
-		add_action( 'wp_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir) {
-			wp_enqueue_style($plugin_name . '-normalize-styles', $gbbot_theme_dir.'/assets/normalize.css', array(), false);
-			wp_enqueue_style($plugin_name . '-print-styles', $gbbot_theme_dir.'/assets/print.css', array(), false, 'print');
-			wp_enqueue_script($plugin_name . '-frontend-js', $gbbot_theme_dir.'/assets/frontend.js', array('jquery'));
+		// Enqueue frontend JS/CSS
+		add_action('wp_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir, $version) {
+			wp_enqueue_style($plugin_name . '-normalize', $gbbot_theme_dir.'assets/normalize.css', array(), $version);
+			wp_enqueue_style($plugin_name . '-core', $gbbot_theme_dir . 'assets/style.css', array(), $version);
+			wp_enqueue_style($plugin_name . '-print', $gbbot_theme_dir.'assets/print.css', array(), $version, 'print');
+			
+			wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir.'assets/frontend.js', array('jquery'), $version);
 			
 			// AlpineJS
 			if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
 				if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
-					wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0');
+					wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
 				}
 			}
 		});
