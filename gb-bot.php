@@ -44,11 +44,7 @@ class GBBot {
 		// Add check to see if it's the correct GBTC
 		if ( !$GBTC_ACTIVE ) {
 			require_once("includes/protection.php");
-			$this->initCore([
-				'gbbot_theme_dir' => $this->plugin->url,
-				'plugin_name' => $this->plugin->name,
-				'version' => $this->plugin->version,
-			]);
+			$this->initCore();
 		}
 
 		add_action( 'admin_init', array( &$this, 'registerSettings' ) );
@@ -58,7 +54,7 @@ class GBBot {
 
 		// CPT actions
 		if(gbbot_cpt_settings('enabled')) {
-		    add_action( 'init', 'gbbot_register_cpt' );
+			add_action( 'init', 'gbbot_register_cpt' );
 			add_action( 'add_meta_boxes', 'gbbot_cpt_register_meta_boxes' );
 		}
 
@@ -80,11 +76,11 @@ class GBBot {
 	/**
 	 * Init Core
 	 */
-	function initCore($plugin_info) {
+	function initCore() {
 		
-		$gbbot_theme_dir = $plugin_info['gbbot_theme_dir'];
-		$plugin_name = $plugin_info['plugin_name'];
-		$version = $plugin_info['version'];
+		$gbbot_theme_dir = $this->plugin->url;
+		$plugin_name = $this->plugin->name;
+		$version = $this->plugin->version;
 
 		// Enqueue backend JS/CSS
 		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir, $version)  {	
