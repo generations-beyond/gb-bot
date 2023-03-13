@@ -110,6 +110,29 @@
 					</table>
 				</div>
 			</div>
+
+			<div class="postbox">
+				<?php $gbbot_active_branch = get_option('gbbot_active_branch', ''); ?>
+				<h3>Version Control</h3>
+				<div class="inside">
+					<p>
+						Enter the name of the git branch that you want to track updates from.
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Branch:</th>
+								<td>
+									<input name="gbbot_active_branch" type="text" id="gbbot_active_branch" value="<?=$gbbot_active_branch?>" placeholder="master">
+									<p class="description">
+										<span style="color: red;">Warning: Using a branch other than 'master' may result in website instability. Do not modify this unless you know what you're doing.</span>
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		<?php endif; ?>
 
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>

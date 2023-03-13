@@ -17,9 +17,21 @@ $gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
 	__FILE__,
 	'gb-bot'
 );
-if (file_exists('../wp-content/plugins/gb-bot/env.php'))
-	include 'env.php';
-$gbBotUpdateChecker->setBranch(isset($gbbot_env) ? $gbbot_env : 'master'); // Set in env.php
+// Set active branch ('master' by default)
+$gbBotActiveBranch = get_option('gbbot_active_branch', 'master');
+$gbBotUpdateChecker->setBranch($gbBotActiveBranch);
+
+// Add branch name after plugin row if not on master
+if ($gbBotActiveBranch != 'master') {
+	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbBotActiveBranch) {
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+		printf(
+			'<tr class="plugin-update-tr"><td colspan="%s" class="plugin-update update-message notice inline notice-warning notice-alt"><div class="update-message"><h4 style="font-weight: normal; margin: 0; font-size: 14px;">%s</h4></div></td></tr>',
+			$wp_list_table->get_column_count(),
+			'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbBotActiveBranch.'</code> branch of '.$plugin['Name'].'.'
+		);
+	}, 10, 2 );
+}
 
 global $GBTC_ACTIVE;
 $GBTC_ACTIVE = file_exists(get_stylesheet_directory().'/core/init.php');
@@ -58,20 +70,6 @@ class GBBot {
 			add_action( 'init', 'gbbot_register_cpt' );
 			add_action( 'add_meta_boxes', 'gbbot_cpt_register_meta_boxes' );
 		}
-
-		// Add branch name after plugin row if not on master
-		add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) {
-			if (file_exists('../wp-content/plugins/gb-bot/env.php'))
-				include 'env.php';
-			if (isset($gbbot_env) && $gbbot_env != 'master') {
-				$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-				printf(
-					'<tr class="plugin-update-tr"><td colspan="%s" class="plugin-update update-message notice inline notice-warning notice-alt"><div class="update-message"><h4 style="font-weight: normal; margin: 0; font-size: 14px;">%s</h4></div></td></tr>',
-					$wp_list_table->get_column_count(),
-					'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbbot_env.'</code> branch of '.$plugin['Name'].'.'
-				);
-			}
-		}, 10, 2 );
 	}
 
 	/**
@@ -189,6 +187,13 @@ class GBBot {
 
 						// Return to top arrow
 						update_option( 'gbbot_enable_return_to_top', ($_REQUEST['gbbot_enable_return_to_top'] ?? '') );
+
+						// Git branch selection
+						if (!empty($_REQUEST['gbbot_active_branch'])) {
+							update_option( 'gbbot_active_branch', ($_REQUEST['gbbot_active_branch'] ?? 'master') );
+						} else {
+							delete_option( 'gbbot_active_branch' );
+						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
 						break;
