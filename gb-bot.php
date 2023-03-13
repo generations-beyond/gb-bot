@@ -33,11 +33,12 @@ class GBBot {
 	*/
 	public function __construct() {
 		global $GBTC_ACTIVE;
+		$plugin_data = get_plugin_data( __FILE__, false );
 
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
-		$this->plugin->displayName  = 'GB&bull;BOT';
-		$this->plugin->version      = '1.2.1';
+		$this->plugin->displayName  = $plugin_data['Name'];
+		$this->plugin->version      = $plugin_data['Version'];
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
