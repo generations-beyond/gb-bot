@@ -21,7 +21,6 @@ export default class NavItems {
         this.navItems.forEach((navItem) => {
             navItem.classList.remove('nav-tab-active')
             if (navItem.dataset.tab == activeItem && !navItem.classList.contains('nav-tab-active')) {
-                console.log(navItem)
                 document.querySelector('#' + activeItem + '-options').classList.add('settings-active')
                 navItem.classList.add('nav-tab-active')
             }
