@@ -83,7 +83,7 @@ class GBBot {
 
 		// Enqueue backend JS/CSS
 		add_action('admin_head', function() use ($plugin_name, $gbbot_theme_dir, $version)  {	
-			$page = $_GET['page'];
+			$page = $_GET['page'] ?? '';
 			wp_enqueue_style($plugin_name . '-admin', $gbbot_theme_dir . 'assets/styles/admin.css', array(), $version);
 			wp_enqueue_script($plugin_name . '-admin', $gbbot_theme_dir.'assets/scripts/general.js', array('jquery'), $version);
 			if (strpos($page, 'gb-bot') !== false) {

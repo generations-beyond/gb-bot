@@ -10,7 +10,7 @@
 	<div id="post-body-content">
 		<div class="settings-form-options" id="general-options">
 			<div class="postbox">
-				<h3 class="hndle">"Team Member" Custom Post Type</h3>
+				<h3>"Team Member" Custom Post Type</h3>
 				<div class="inside">
 					<p>
 						This is a custom post type that includes a collection of fields that are useful for any website needing an "About Us" section that features members of their organization or team.
@@ -116,7 +116,7 @@
 
 		<div class="settings-form-options" id="integrations-options">
 			<div class="postbox">
-				<h3 class="hndle">Live Analytics</h3>
+				<h3>Live Analytics</h3>
 				<div class="inside">
 					<p>
 						Chances are you have analytics already being collected on your website, but how often do you check them? And when you do check them, how easily are you able to interpret your stats? GB•BOT allows us to create a live data feed to a monitor in your office so you can keep an eye on your stats with an easy to understand interface.
@@ -128,7 +128,7 @@
 			</div>
 
 			<div class="postbox">
-				<h3 class="hndle">ReBound Tracking</h3>
+				<h3>ReBound Tracking</h3>
 				<div class="inside">
 					<p>
 						ReBound allows you to directly market to what we call "hand raisers"&ndash;potential customers who have browsed a specific product or service on your website, but left without leaving their contact information. We now have the technology to reach them anyway! Enter your ReBound Tracking ID in the box below to enable ReBound tracking.
@@ -150,7 +150,7 @@
 			</div>
 
 			<div class="postbox">
-				<h3 class="hndle">IoT Notifications</h3>
+				<h3>IoT Notifications</h3>
 				<div class="inside">
 					<p>
 						The Internet of Things (IoT) is growing every day. Wouldn't it make sense that your website become a part of it? With GB•BOT installed, we have the ability to trigger real objects in your office, such as an internet-enabled light bulb to react whenever you get a new website lead.
