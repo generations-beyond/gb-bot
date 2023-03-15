@@ -1,12 +1,6 @@
 <form class="gbbot-settings" action="admin.php?page=<?php echo $this->plugin->name; ?>" method="POST">
 	<?php wp_nonce_field( $this->plugin->name, $this->plugin->name . '_nonce' ); ?>
 
-	<?php 
-		$gbbot_team_cpt_enable = gbbot_cpt_settings('enabled');
-		$gbbot_team_post_label = gbbot_cpt_settings('label');
-		$gbbot_team_post_type = gbbot_cpt_settings('type');
-	?>
-
 	<div id="post-body-content">
 		<div class="settings-form-options" id="general-options">
 			<div class="postbox">
@@ -19,16 +13,16 @@
 						<tbody>
 							<tr>
 								<th scope="row">Enable</th>
-								<td><input name="gbbot_team_cpt_enable" type="checkbox" id="gbbot_team_cpt_enable" value='1' <?=$gbbot_team_cpt_enable?'checked':''?> ></td>
+								<td><input name="gbbot_team_cpt_enable" type="checkbox" id="gbbot_team_cpt_enable" value='1' <?= $this->settings['gbbot_team_cpt_enable'] ? 'checked' : '' ?> ></td>
 							</tr>
 							<tr>
 								<th scope="row">Post Type Label</th>
-								<td><input name="gbbot_team_post_label" type="text" id="gbbot_team_post_label" value="<?=$gbbot_team_post_label?>" placeholder="Ex: Team"></td>
+								<td><input name="gbbot_team_post_label" type="text" id="gbbot_team_post_label" value="<?= $this->settings['gbbot_team_post_label'] ?>" placeholder="Team"></td>
 							</tr>
 							<tr>
 								<th scope="row">Post type slug</th>
 								<td>
-									<input name="gbbot_team_post_type" type="text" id="gbbot_team_post_type" value="<?=$gbbot_team_post_type?>" placeholder="Ex: team_member">
+									<input name="gbbot_team_post_type" type="text" id="gbbot_team_post_type" value="<?= $this->settings['gbbot_team_post_type'] ?>" placeholder="team_member">
 									<p class="description">
 										<span style="color: red;">Warning: Changing the post type slug after creating Team Members can cause existing Team Members to disappear.</span>
 									</p>
@@ -39,11 +33,11 @@
 				</div>
 			</div>
 			<?php if($GBTC_ACTIVE) : ?>
-				<div class="postbox">
-					<h3>GBTC Detected</h3>
+				<div class="postbox notice-warning notice-alt">
+					<h3>GB Theme Core Detected</h3>
 					<div class="inside">
 						<p>
-							<strong>Notice</strong>: GBTC is currently active. To get the most features out of GB Bot install and enable the GB Proactive Theme.
+							<strong>Notice</strong>: GB Theme Core is currently activated. To get the most features out of <?= $this->plugin->name ?>, install and enable the <strong>Proactive by GB</strong> theme.
 						</p>
 					</div>
 				</div>
@@ -81,7 +75,6 @@
 					</div>
 				</div>
 				<div class="postbox">
-					<?php $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right'); ?>
 					<h3>Enable Back to Top arrow</h3>
 					<div class="inside">
 						<p>
@@ -93,15 +86,15 @@
 									<th scope="row">Location:</th>
 									<td>
 										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?=$gbbot_enable_return_to_top == 'bottom_right'?'checked':''?> > 
+											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_right' ? 'checked' : '' ?> > 
 											Bottom Right
 										</label><br>
 										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_left' <?=$gbbot_enable_return_to_top == 'bottom_left'?'checked':''?> > 
+											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_left' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_left' ? 'checked' : '' ?> > 
 											Bottom Left
 										</label><br>
 										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='none' <?=$gbbot_enable_return_to_top == 'none'?'checked':''?> > 
+											<input name="gbbot_enable_return_to_top" type="radio" value='none' <?= $this->settings['gbbot_enable_return_to_top'] == 'none' ? 'checked' : '' ?> > 
 											None (disabled)
 										</label>
 									</td>
@@ -138,7 +131,7 @@
 							<tr>
 								<th scope="row"><label for="gbbot_rebound_id">Tracking ID</label></th>
 								<td>
-									<input name="gbbot_rebound_id" type="text" id="gbbot_rebound_id" value="<?php echo $this->settings['gbbot_rebound_id']; ?>" class="regular-text ltr">
+									<input name="gbbot_rebound_id" type="text" id="gbbot_rebound_id" value="<?= $this->settings['gbbot_rebound_id'] ?>">
 									<p>
 										<em>To obtain your ReBound Tracking ID, contact <a href="https://generationsbeyond.com/rebound-marketing/" target="_blank" rel="nofollow">Generations Beyond</a>.</em>
 									</p>
@@ -163,39 +156,27 @@
 		</div>
 
 		<div class="settings-form-options" id="advanced-options">
-			<?php if($GBTC_ACTIVE) : ?>
-				<div class="postbox">
-					<h3>GBTC Detected</h3>
-					<div class="inside">
-						<p>
-							<strong>Notice</strong>: GBTC is currently active. To get the most features out of GB Bot install and enable the GB Proactive Theme.
-						</p>
-					</div>
+			<div class="postbox">
+				<h3>Version Control</h3>
+				<div class="inside">
+					<p>
+						Enter the name of the git branch that you want to track updates from.
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Branch:</th>
+								<td>
+									<input name="gbbot_active_branch" type="text" id="gbbot_active_branch" value="<?= $this->settings['gbbot_active_branch'] ?>" placeholder="master">
+									<p class="description">
+										<span style="color: red;">Warning: Using a branch other than 'master' may result in website instability. Do not modify this unless you know what you're doing.</span>
+									</p>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-			<?php else : ?>
-				<div class="postbox">
-					<?php $gbbot_active_branch = get_option('gbbot_active_branch', ''); ?>
-					<h3>Version Control</h3>
-					<div class="inside">
-						<p>
-							Enter the name of the git branch that you want to track updates from.
-						</p>
-						<table class="form-table">
-							<tbody>
-								<tr>
-									<th scope="row">Branch:</th>
-									<td>
-										<input name="gbbot_active_branch" type="text" id="gbbot_active_branch" value="<?=$gbbot_active_branch?>" placeholder="master">
-										<p class="description">
-											<span style="color: red;">Warning: Using a branch other than 'master' may result in website instability. Do not modify this unless you know what you're doing.</span>
-										</p>
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-				</div>
-			<?php endif; ?>
+			</div>
 		</div>
 
 
