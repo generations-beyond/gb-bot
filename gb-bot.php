@@ -182,17 +182,34 @@ class GBBot {
 				$page = $_GET['page'];
 				switch ($page) {
 					case $this->plugin->name:
-						// For Team CPT
+						/**
+						* GENERAL TAB
+						*/
+
+						// Team CPT
 						update_option( 'gbbot_team_cpt_enable', ($_REQUEST['gbbot_team_cpt_enable'] ?? false) );
 						update_option( 'gbbot_team_post_label', $_REQUEST['gbbot_team_post_label'] );
 						update_option( 'gbbot_team_post_type', $_REQUEST['gbbot_team_post_type'] );
 
-						// Featured image 
+						// Featured Image Admin Thumbnail
+ 
 						update_option( 'gbbot_featured_image_post_types', ($_REQUEST['gbbot_featured_image_post_types'] ?? []) );
 
-						// Return to top arrow
+						// Back to Top arrow
 						update_option( 'gbbot_enable_return_to_top', ($_REQUEST['gbbot_enable_return_to_top'] ?? '') );
+						
+						/**
+						* INTEGRATIONS TAB
+						*/
+						if (!empty($_REQUEST['gbbot_rebound_id'])) {
+							update_option( 'gbbot_rebound_id', $_REQUEST['gbbot_rebound_id'] );
+						} else {
+							delete_option( 'gbbot_rebound_id' );
+						}
 
+						/**
+						* ADVANCED TAB
+						*/
 						// Git branch selection
 						if (!empty($_REQUEST['gbbot_active_branch'])) {
 							update_option( 'gbbot_active_branch', ($_REQUEST['gbbot_active_branch'] ?? 'master') );
@@ -201,11 +218,6 @@ class GBBot {
 						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
-						break;
-
-					case $this->plugin->name.'-integrations':
-						update_option( 'gbbot_rebound_id', $_REQUEST['gbbot_rebound_id'] );
-						$this->message = __( 'Settings Saved.', 'gb-bot' );
 						break;
 					
 					default:
