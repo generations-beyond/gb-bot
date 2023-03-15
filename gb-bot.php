@@ -10,31 +10,52 @@
 * Text Domain: gb-bot
 **/
 
-// Plugin Update Checker Support
-require 'plugin-update-checker/plugin-update-checker.php';
-$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
-	'https://github.com/generations-beyond/gb-bot/',
-	__FILE__,
-	'gb-bot'
-);
+// Check if GB Theme Core is active
+global $GBTC_ACTIVE;
+$GBTC_ACTIVE = file_exists(get_stylesheet_directory().'/core/init.php');
+
 // Set active branch ('master' by default)
 $gbBotActiveBranch = get_option('gbbot_active_branch', 'master');
-$gbBotUpdateChecker->setBranch($gbBotActiveBranch);
+
+if ($GBTC_ACTIVE) {
+
+	// Do not allow plugin updates
+	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbBotActiveBranch) {
+		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+		printf(
+			'<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="background: #fefefe;" class="notice inline notice-info notice-alt"><p>%s</p></div>%s</td></tr>',
+			$wp_list_table->get_column_count(),
+			'<strong>Note:</strong> You are currently using <strong>GB Theme Core</strong> as your active theme. Switch to <strong>Proactive by GB</strong> to continue receiving '.$plugin['Name'].' updates.',
+			'<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+		);
+	}, 10, 2 );
+
+} else {
+
+	// Plugin Update Checker Support
+	require 'plugin-update-checker/plugin-update-checker.php';
+	$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+		'https://github.com/generations-beyond/gb-bot/',
+		__FILE__,
+		'gb-bot'
+	);
+	$gbBotUpdateChecker->setBranch($gbBotActiveBranch);
+
+}
 
 // Add branch name after plugin row if not on master
 if ($gbBotActiveBranch != 'master') {
 	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbBotActiveBranch) {
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		printf(
-			'<tr class="plugin-update-tr"><td colspan="%s" class="plugin-update update-message notice inline notice-warning notice-alt"><div class="update-message"><h4 style="font-weight: normal; margin: 0; font-size: 14px;">%s</h4></div></td></tr>',
+			'<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div class="notice inline notice-warning notice-alt"><p>%s</p></div>%s</td></tr>',
 			$wp_list_table->get_column_count(),
-			'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbBotActiveBranch.'</code> branch of '.$plugin['Name'].'.'
+			'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbBotActiveBranch.'</code> branch of '.$plugin['Name'].'.',
+			'<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
 		);
+
 	}, 10, 2 );
 }
-
-global $GBTC_ACTIVE;
-$GBTC_ACTIVE = file_exists(get_stylesheet_directory().'/core/init.php');
 
 if ( ! function_exists( 'is_plugin_active' ) )
 	require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
