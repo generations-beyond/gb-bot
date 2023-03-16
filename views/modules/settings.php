@@ -177,6 +177,30 @@
 					</table>
 				</div>
 			</div>
+
+			<?php if ($this->is_super_user) : ?>
+				<div class="postbox">
+					<h3>Super Users</h3>
+					<div class="inside">
+						<p>
+							Enter a comma-separated list of usernames to become additional <?= $this->plugin->displayName ?> Super Users on this website.
+						</p>
+						<table class="form-table">
+							<tbody>
+								<tr>
+									<th scope="row">Usernames</th>
+									<td>
+										<input name="gbbot_super_users" type="text" id="gbbot_super_users" value="<?= implode(',',$this->settings['gbbot_super_users']) ?>" placeholder="example1,example2">
+										<p class="description">
+											<span style="color: red;">Warning: If your username is in this list, be careful not to remove yourself!</span>
+										</p>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			<?php endif; ?>
 		</div>
 
 
