@@ -2,7 +2,7 @@
 	<?php wp_nonce_field( $this->plugin->name, $this->plugin->name . '_nonce' ); ?>
 
 	<div id="post-body-content">
-		<div class="settings-form-options" id="general-options">
+		<div class="gbbot-form-options" data-nav="general">
 			<div class="postbox">
 				<h3>"Team Member" Custom Post Type</h3>
 				<div class="inside">
@@ -107,7 +107,7 @@
 			<?php endif; ?>
 		</div>
 
-		<div class="settings-form-options" id="integrations-options">
+		<div class="gbbot-form-options" data-nav="integrations">
 			<div class="postbox">
 				<h3>Live Analytics</h3>
 				<div class="inside">
@@ -155,7 +155,7 @@
 			</div>
 		</div>
 
-		<div class="settings-form-options" id="advanced-options">
+		<div class="gbbot-form-options" data-nav="advanced">
 			<div class="postbox">
 				<h3>Version Control</h3>
 				<div class="inside">
