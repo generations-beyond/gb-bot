@@ -37,7 +37,7 @@
 					<h3>GB Theme Core Detected</h3>
 					<div class="inside">
 						<p>
-							<strong>Notice</strong>: GB Theme Core is currently activated. To get the most features out of <?= $this->plugin->name ?>, install and enable the <strong>Proactive by GB</strong> theme.
+							<strong>Notice</strong>: GB Theme Core is currently activated. To get the most features out of <?= $this->plugin->displayName ?>, install and enable the <strong>Proactive by GB</strong> theme.
 						</p>
 					</div>
 				</div>
