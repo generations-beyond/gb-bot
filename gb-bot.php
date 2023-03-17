@@ -66,16 +66,19 @@ class GBBot {
 	*/
 	public function __construct() {
 		global $GBTC_ACTIVE;
-		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
-
+		
 		$plugin_data = get_plugin_data( __FILE__, false );
-
+		
 		$this->plugin               = new stdClass;
 		$this->plugin->name         = 'gb-bot';
 		$this->plugin->displayName  = $plugin_data['Name'];
 		$this->plugin->version      = $plugin_data['Version'];
 		$this->plugin->folder       = plugin_dir_path( __FILE__ );
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
+
+		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
+		$this->GBTC_ACTIVE_CLASS = 'notice-warning notice-alt';
+		$this->GBTC_ACTIVE_WARNING = $this->setGBTCWarn();
 
 		// Get latest settings
 		$this->refreshSettings();
@@ -103,6 +106,25 @@ class GBBot {
 		}
 	}
 
+	/**
+	 * Set GBTC Warning Message
+	 */
+	function setGBTCWarn() {
+		ob_start(); ?>
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<h3><span style="color:red;font-weight:700">*</span> = GB Theme Core Detected</h3>
+				<div class="inside">
+					<p style="color:red">
+						GB Theme Core is currently activated. This means any options in these boxes will have no affect, however they can be pre-configured before switching themes. 
+					</p>
+					<p>
+						To get the most features out of <?= $this->plugin->displayName ?>, install and enable the <strong>Proactive by GB</strong> theme.
+					</p>
+				</div>
+			</div>
+		<?php return ob_get_clean();
+	}
+	
 	/**
 	 * Set up permission check
 	 */

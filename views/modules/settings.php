@@ -32,18 +32,9 @@
 					</table>
 				</div>
 			</div>
-			<?php if($GBTC_ACTIVE) : ?>
-				<div class="postbox notice-warning notice-alt">
-					<h3>GB Theme Core Detected</h3>
-					<div class="inside">
-						<p>
-							<strong>Notice</strong>: GB Theme Core is currently activated. To get the most features out of <?= $this->plugin->displayName ?>, install and enable the <strong>Proactive by GB</strong> theme.
-						</p>
-					</div>
-				</div>
-			<?php else : ?>
-				<div class="postbox">
-					<h3>Featured Image Admin Thumbnail</h3>
+			
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+					<h3>Featured Image Admin Thumbnail<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
 					<div class="inside">
 						<p>
 							Adds inline image thumbnails to admin columns for the selected post types.
@@ -74,8 +65,8 @@
 						</table>
 					</div>
 				</div>
-				<div class="postbox">
-					<h3>Enable Back to Top arrow</h3>
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+					<h3>Enable Back to Top arrow<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
 					<div class="inside">
 						<p>
 							Adds an icon on the bottom of the site that returns to the top
@@ -104,7 +95,7 @@
 						</table>
 					</div>
 				</div>
-			<?php endif; ?>
+
 		</div>
 
 		<div class="gbbot-form-options" data-nav="integrations">
@@ -156,8 +147,8 @@
 		</div>
 
 		<div class="gbbot-form-options" data-nav="advanced">
-			<div class="postbox">
-				<h3>Version Control</h3>
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<h3>Version Control<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
 				<div class="inside">
 					<p>
 						Enter the name of the git branch that you want to track updates from.
@@ -179,8 +170,8 @@
 			</div>
 
 			<?php if ($this->is_super_user) : ?>
-				<div class="postbox">
-					<h3>Super Users</h3>
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+					<h3>Super Users<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
 					<div class="inside">
 						<p>
 							Enter a comma-separated list of usernames to become additional <?= $this->plugin->displayName ?> Super Users on this website.
@@ -202,7 +193,7 @@
 				</div>
 			<?php endif; ?>
 		</div>
-
+			
 
 		<p class="submit"><input type="submit" name="submit" id="submit" class="button button-primary" value="Save Changes"></p>
 	</div>
