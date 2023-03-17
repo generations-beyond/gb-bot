@@ -14,13 +14,10 @@
 global $GBTC_ACTIVE;
 $GBTC_ACTIVE = file_exists(get_stylesheet_directory().'/core/init.php');
 
-// Set active branch ('master' by default)
-$gbBotActiveBranch = get_option('gbbot_active_branch', 'master');
-
 if ($GBTC_ACTIVE) {
 
 	// Do not allow plugin updates
-	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbBotActiveBranch) {
+	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) {
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		printf(
 			'<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="background: #fefefe;" class="notice inline notice-info notice-alt"><p>%s</p></div>%s</td></tr>',
@@ -39,22 +36,8 @@ if ($GBTC_ACTIVE) {
 		__FILE__,
 		'gb-bot'
 	);
-	$gbBotUpdateChecker->setBranch($gbBotActiveBranch);
+	$gbBotUpdateChecker->setBranch(get_option('gbbot_active_branch', 'master'));
 
-}
-
-// Add branch name after plugin row if not on master
-if ($gbBotActiveBranch != 'master') {
-	add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbBotActiveBranch) {
-		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-		printf(
-			'<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div class="notice inline notice-warning notice-alt"><p>%s</p></div>%s</td></tr>',
-			$wp_list_table->get_column_count(),
-			'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbBotActiveBranch.'</code> branch of '.$plugin['Name'].'.',
-			'<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
-		);
-
-	}, 10, 2 );
 }
 
 if ( ! function_exists( 'is_plugin_active' ) )
@@ -103,6 +86,25 @@ class GBBot {
 		if ($this->settings['gbbot_team_cpt_enable']) {
 			add_action( 'init', 'gbbot_register_cpt' );
 			add_action( 'add_meta_boxes', 'gbbot_cpt_register_meta_boxes' );
+		}
+
+		// Add branch name notice after plugin row if not on master
+		$gbbot_active_branch = get_option('gbbot_active_branch', 'master');
+		if ($gbbot_active_branch != 'master') {
+			add_action( 'admin_init', function () use ($gbbot_active_branch) {
+				// Only show if current user is a super user
+				if ($this->is_super_user) {
+					add_action( 'after_plugin_row_gb-bot/gb-bot.php', function ( $file, $plugin ) use ($gbbot_active_branch) {
+						$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
+						printf(
+							'<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div class="notice inline notice-warning notice-alt"><p>%s</p></div>%s</td></tr>',
+							$wp_list_table->get_column_count(),
+							'<strong>Note:</strong> You are currently configured to receive updates from the <code>'.$gbbot_active_branch.'</code> branch of '.$plugin['Name'].'.',
+							'<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+						);
+					}, 10, 2 );
+				}
+			});
 		}
 	}
 
