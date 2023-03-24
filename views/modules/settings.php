@@ -192,6 +192,26 @@
 						</table>
 					</div>
 				</div>
+
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+					<h3>Custom Admin Styles <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
+					<?= $this->notices['super_user_only'] ?>
+					<div class="inside">
+						<p>
+							Enter custom CSS that will show up for all users in the backend of WordPress.
+						</p>
+						<table class="form-table">
+							<tbody>
+								<tr>
+									<th scope="row">Custom CSS</th>
+									<td>
+										<textarea name="gbbot_admin_css" type="text" id="gbbot_admin_css" class="large-text code" rows="10" cols="50"><?= $this->settings['gbbot_admin_css'] ?></textarea>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			<?php endif; ?>
 		</div>
 			

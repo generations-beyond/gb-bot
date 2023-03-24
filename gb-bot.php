@@ -208,6 +208,14 @@ class GBBot {
 			$templates[plugin_dir_path( __FILE__ ) . 'templates/empty-parent-page.php'] = __( 'Empty Parent Page', 'gb-bot' );
 			return $templates;
 		} );
+
+		// Admin custom styles
+		$gbbot_admin_css = $this->settings['gbbot_admin_css'];
+		if ($gbbot_admin_css) {
+			add_action('admin_head', function() use ($gbbot_admin_css) {
+				echo '<style>' . $gbbot_admin_css . "</style>";
+			});
+		}
 	}
 
 	/**
@@ -262,6 +270,7 @@ class GBBot {
 			// Advanced
 			'gbbot_active_branch' => get_option('gbbot_active_branch', ''),
 			'gbbot_super_users' => get_option('gbbot_super_users', []),
+			'gbbot_admin_css' => get_option('gbbot_admin_css', ''),
 		);
 	}
 
@@ -364,6 +373,9 @@ class GBBot {
 								return !empty($input);
 							}) : null;
 							$this->updateOrDeleteOption('gbbot_super_users', $input_super_users);
+
+							// Admin CSS
+							$this->updateOrDeleteOption('gbbot_admin_css', ($_REQUEST['gbbot_admin_css'] ?? null));
 						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
