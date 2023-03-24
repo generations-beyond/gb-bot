@@ -1,0 +1,14 @@
+// General Variables 
+$base-font-family: var(--e-global-typography-primary-font-family), Sans-serif;
+
+// Color Variables
+$color-white: #fff;
+
+$color-primary: var(--e-global-color-primary);
+$color-secondary: var(--e-global-color-secondary);
+$color-text: var(--e-global-color-text);
+$color-accent: var(--e-global-color-accent);
+
+$color-border: #dddddd;
+$color-btn: $color-primary;
+$color-btn-hover: $color-accent;

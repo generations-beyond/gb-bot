@@ -5,11 +5,12 @@ html {
 body {
 	font-size: 14px;
 	line-height: 1.8;
+	font-family: $base-font-family;
+	color: $color-text;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-weight: 600;
 	margin: 0 0 20px;
-	color: #333;
 	line-height: 1.4;
 }
 b, strong {
@@ -27,9 +28,10 @@ a:hover,
 a:focus {
 	transition: all .3s ease;
 }
-
-
-// TODO: Potentially remove this once form styles are implemented
-button[type=submit] {
-    cursor: pointer;
+a {
+	color:$color-text;
+	&:hover,
+	&:focus {
+		color:$color-primary;
+	}
 }
