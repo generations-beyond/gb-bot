@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 6.1.1
 Tested up to: 6.1.1
-Stable tag: 1.3.0
+Stable tag: 1.3.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -23,10 +23,19 @@ The Internet of Things (IoT) is growing every day. Wouldn't it make sense that y
 = Team Member Custom Post Type = 
 A standardized custom post type with a collection of fields that will be useful for any website needing an "About Us" section that features members of their organization or team.
 
+= Featured Image Admin Thumbnail =
+Adds inline image thumbnails to admin columns for the selected post types.
+
+= Back-to-Top Arrow =
+Adds a button that returns the user to the top of the page when clicked.
+
 = Elements Usage Calculator for Elementor = 
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.3.1 - 2023-03-24
+* Bug fixes.
 
 #### 1.3.0 - 2023-03-24
 * Fix version numbers for enqueued style / scripts
@@ -39,15 +48,15 @@ An easy way to identify all of the elements used in your Elementor-built website
 * Allowed for pre-configuring of plugin settings with a warning
 * Restructured protection functionality
 * Various style updates and re-organization
-* Various bugfixes 
-* General tiding up 
+* Various bugfixes
+* General tiding up
 
 #### 1.2.1 - 2023-03-09
-* Bug fixes
+* Bug fixes.
 
 #### 1.2.0 - 2023-03-08
 * Added "Back to Top" option to settings
-* Bug fixes
+* Bug fixes.
 
 #### 1.1.5 - 2023-03-03
 * Bug fixes.
