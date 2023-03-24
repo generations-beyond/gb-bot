@@ -35,4 +35,4 @@
 </div>
 
 <!-- GBTC WARNING MSG -->
-<?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_WARNING : '' ?>
+<?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning'] : '' ?>

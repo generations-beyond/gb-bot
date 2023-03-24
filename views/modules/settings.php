@@ -172,6 +172,7 @@
 			<?php if ($this->is_super_user) : ?>
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
 					<h3>Super Users <?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<?= $this->notices['super_user_only'] ?>
 					<div class="inside">
 						<p>
 							Enter a comma-separated list of usernames to become additional <?= $this->plugin->displayName ?> Super Users on this website.
