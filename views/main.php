@@ -18,9 +18,9 @@
 		<div id="post-body" class="metabox-holder columns-2">
 			<!-- Content -->
 			<?php 
-			require_once($this->plugin->folder . 'views/modules/nav.php');
 			if (isset($_GET["page"])) {
 				if ($_GET["page"] == $this->plugin->name) {
+					require_once($this->plugin->folder . 'views/modules/nav.php');
 					$cur_page = 'settings.php';
 				}
 				else {

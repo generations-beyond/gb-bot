@@ -1,0 +1,16 @@
+/**
+ * GB•BOT - print.css
+ *
+ * This file is intended for custom print-specific CSS.
+ * 
+ */
+@media print {
+	.hidden-on-print,
+	.acsb-trigger,
+	body .acsb-trigger.acsb-ready {
+		display: none !important;
+	}
+	.visible-on-print {
+		display: block !important;
+	}
+}

@@ -9,19 +9,19 @@
 .gb-link {
 	opacity: 0.5;
 	transition: opacity 0.2s;
-}
-.gb-link:hover {
-	opacity: 1;
-}
-.gb-link a {
+	&:hover {
+		opacity: 1
+	}
+	a {
 	color: inherit !important;
-}
-.gb-link a:hover {
-	color: inherit !important;
-	text-decoration: underline;
-}
-.gb-link span {
-	white-space: nowrap;
+		&:hover {
+			color: inherit !important;
+			text-decoration: underline;
+		}
+	}
+	span {
+		white-space: nowrap;
+	}
 }
 .nobreak {
 	white-space: nowrap;
@@ -29,7 +29,6 @@
 
 /* GB Bot back to top */
 #scroll-top {
-	/* display: none; */
 	opacity: 0;
 	position: fixed;
 	bottom: 20px;
@@ -49,17 +48,20 @@
 	-moz-box-sizing: content-box;
 	box-sizing: content-box;
 	text-decoration: none;
-	transition: opacity 0.3s;
-}
-#scroll-top.bottom_right{
-	right: 20px;
-}
-#scroll-top.bottom_left {
-	left: 20px;
-}
-#scroll-top svg {
-	width: 12px;
-	height: 40px;
+	transition: opacity 0.3s, background-color 0.3s;
+	&:hover {
+		background-color: rgba(0, 0, 0, .8);
+	}
+	&.bottom_right {
+		right: 20px;
+	}
+	&.bottom_left {
+		left: 20px;
+	}
+	svg {
+		width: 12px;
+		height: 40px;
+	}
 }
 
 /* Elementor/OceanWP fixes */

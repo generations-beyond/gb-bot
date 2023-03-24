@@ -14,3 +14,19 @@
 #rank_math_review_plugin_notice {
 	display: none !important;
 }
+
+// GB Bot Settings page
+.gbbot-nav-tab {
+	margin-bottom: 15px;
+	& a.nav-tab:focus,
+	& a.nav-tab:hover {
+		box-shadow: none !important;
+		outline: none !important;
+	}
+}
+.gbbot-settings .gbbot-form-options {
+	display: none;
+	&.settings-active {
+		display: block;
+	}
+}

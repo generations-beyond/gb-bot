@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 6.1.1
 Tested up to: 6.1.1
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -27,6 +27,20 @@ A standardized custom post type with a collection of fields that will be useful 
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.3.0 - 2023-03-24
+* Fix version numbers for enqueued style / scripts
+* Reorganized Settings Pages
+* Separated back end settings into their own boxes to improve legibility
+* NPM setup and reorganized scripts and styles
+* Refactored support for git branch selection
+* Refactored option-saving functionality
+* Prevent plugin updates if GBTC is the active theme
+* Allowed for pre-configuring of plugin settings with a warning
+* Restructured protection functionality
+* Various style updates and re-organization
+* Various bugfixes 
+* General tiding up 
 
 #### 1.2.1 - 2023-03-09
 * Bug fixes

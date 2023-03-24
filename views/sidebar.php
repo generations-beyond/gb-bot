@@ -33,3 +33,6 @@
         </p>
     </div>
 </div>
+
+<!-- GBTC WARNING MSG -->
+<?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning'] : '' ?>
