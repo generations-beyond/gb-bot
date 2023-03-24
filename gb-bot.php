@@ -270,6 +270,7 @@ class GBBot {
 	*/
 	function registerNotices() {
 		$this->notices = array(
+			'gbtc_warning_label' => '<span style="color:red;font-weight:700;">*</span>',
 			'gbtc_warning' => <<<EOD
 				<div class="postbox {$this->GBTC_ACTIVE_CLASS}">
 					<h3><span style="color:red;font-weight:700">*</span> = GB Theme Core Detected</h3>

@@ -34,7 +34,7 @@
 			</div>
 			
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<div class="inside">
 						<p>
 							Adds inline image thumbnails to admin columns for the selected post types.
@@ -66,7 +66,7 @@
 					</div>
 				</div>
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<div class="inside">
 						<p>
 							Adds a button that returns the user to the top of the page when clicked.
@@ -148,7 +148,7 @@
 
 		<div class="gbbot-form-options" data-nav="advanced">
 			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-				<h3>Version Control <?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+				<h3>Version Control <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 				<div class="inside">
 					<p>
 						Enter the name of the git branch that you want to track updates from.
@@ -171,7 +171,7 @@
 
 			<?php if ($this->is_super_user) : ?>
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Super Users <?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Super Users <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<?= $this->notices['super_user_only'] ?>
 					<div class="inside">
 						<p>
