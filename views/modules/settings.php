@@ -147,8 +147,8 @@
 		</div>
 
 		<div class="gbbot-form-options" data-nav="advanced">
-			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-				<h3>Version Control<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+			<div class="postbox">
+				<h3>Version Control</h3>
 				<div class="inside">
 					<p>
 						Enter the name of the git branch that you want to track updates from.
