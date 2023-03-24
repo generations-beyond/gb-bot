@@ -5,6 +5,13 @@
  * 
  */
 
+// Remove margin-bottom by default for last-child text elements
+p:last-child,
+ul:last-child,
+ol:last-child {
+	margin-bottom: 0;
+}
+
 /* GB footer link */
 .gb-link {
 	opacity: 0.5;
