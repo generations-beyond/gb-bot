@@ -34,7 +34,7 @@
 			</div>
 			
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Featured Image Admin Thumbnail<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<div class="inside">
 						<p>
 							Adds inline image thumbnails to admin columns for the selected post types.
@@ -42,7 +42,7 @@
 						<table class="form-table">
 							<tbody>
 								<tr>
-									<th scope="row">Post Types:</th>
+									<th scope="row">Post Types</th>
 									<td>
 										<?php 
 											$post_types = get_post_types( [], 'objects');
@@ -66,15 +66,15 @@
 					</div>
 				</div>
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Enable Back to Top arrow<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<div class="inside">
 						<p>
-							Adds an icon on the bottom of the site that returns to the top
+							Adds a button that returns the user to the top of the page when clicked.
 						</p>
 						<table class="form-table">
 							<tbody>
 								<tr>
-									<th scope="row">Location:</th>
+									<th scope="row">Location</th>
 									<td>
 										<label>
 											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_right' ? 'checked' : '' ?> > 
@@ -148,7 +148,7 @@
 
 		<div class="gbbot-form-options" data-nav="advanced">
 			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-				<h3>Version Control<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+				<h3>Version Control <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 				<div class="inside">
 					<p>
 						Enter the name of the git branch that you want to track updates from.
@@ -156,7 +156,7 @@
 					<table class="form-table">
 						<tbody>
 							<tr>
-								<th scope="row">Branch:</th>
+								<th scope="row">Branch</th>
 								<td>
 									<input name="gbbot_active_branch" type="text" id="gbbot_active_branch" value="<?= $this->settings['gbbot_active_branch'] ?>" placeholder="master">
 									<p class="description">
@@ -171,7 +171,8 @@
 
 			<?php if ($this->is_super_user) : ?>
 				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Super Users<?= $this->GBTC_ACTIVE ? '<span style="color:red;font-weight:700;">*</span>' : '' ?></h3>
+					<h3>Super Users <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
+					<?= $this->notices['super_user_only'] ?>
 					<div class="inside">
 						<p>
 							Enter a comma-separated list of usernames to become additional <?= $this->plugin->displayName ?> Super Users on this website.

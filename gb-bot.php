@@ -61,7 +61,9 @@ class GBBot {
 
 		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
 		$this->GBTC_ACTIVE_CLASS = 'notice-warning notice-alt';
-		$this->GBTC_ACTIVE_WARNING = $this->setGBTCWarn();
+
+		// Register frontend notices
+		$this->registerNotices();
 
 		// Get latest settings
 		$this->refreshSettings();
@@ -106,25 +108,6 @@ class GBBot {
 				}
 			});
 		}
-	}
-
-	/**
-	 * Set GBTC Warning Message
-	 */
-	function setGBTCWarn() {
-		ob_start(); ?>
-			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-				<h3><span style="color:red;font-weight:700">*</span> = GB Theme Core Detected</h3>
-				<div class="inside">
-					<p style="color:red">
-						GB Theme Core is currently activated. This means any options in these boxes will have no affect, however they can be pre-configured before switching themes. 
-					</p>
-					<p>
-						To get the most features out of <?= $this->plugin->displayName ?>, install and enable the <strong>Proactive by GB</strong> theme.
-					</p>
-				</div>
-			</div>
-		<?php return ob_get_clean();
 	}
 	
 	/**
@@ -282,6 +265,28 @@ class GBBot {
 		);
 	}
 
+	/**
+	* Preset notices to be used on the frontend
+	*/
+	function registerNotices() {
+		$this->notices = array(
+			'gbtc_warning_label' => '<span style="color:red;font-weight:700;">*</span>',
+			'gbtc_warning' => <<<EOD
+				<div class="postbox {$this->GBTC_ACTIVE_CLASS}">
+					<h3><span style="color:red;font-weight:700">*</span> = GB Theme Core Detected</h3>
+					<div class="inside">
+						<p style="color:red">
+							GB Theme Core is currently activated. This means any options in these boxes will have no affect, however they can be pre-configured before switching themes. 
+						</p>
+						<p>
+							To get the most features out of {$this->plugin->displayName}, install and enable the <strong>Proactive by GB</strong> theme.
+						</p>
+					</div>
+				</div>
+			EOD,
+			'super_user_only' => '<h3 style="position: absolute;background: #2271b1;color: white;top: 0;right: 0;">Super User Only</h3>',
+		);
+	}
 
 	/**
 	* Utility function for updating settings
