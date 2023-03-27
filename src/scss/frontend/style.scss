@@ -118,3 +118,10 @@ body:not(.elementor-editor-active) .visible-on-print,
 body:not(.elementor-editor-active) [x-cloak] {
 	display: none;
 }
+
+/* Popup image fix */ 
+.elementor-slideshow__header {
+	left: 0 !important;
+	right: 0 !important;
+	width: auto !important;
+}
