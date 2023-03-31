@@ -119,9 +119,36 @@ body:not(.elementor-editor-active) [x-cloak] {
 	display: none;
 }
 
+/*******************************
+Various Elementor Default fixes 
+********************************/
 /* Popup image fix */ 
 .elementor-slideshow__header {
 	left: 0 !important;
 	right: 0 !important;
 	width: auto !important;
+}
+
+// Fix for popup bg colors
+.dialog-widget .dialog-widget-content {
+	background-color: #fff;
+}
+
+// WYSIWYG Alignment fixes
+img.aligncenter,
+img.alignright,
+.wp-caption.aligncenter,
+.wp-caption.alignright {
+	display: block;
+}
+
+img.aligncenter,
+.wp-caption.aligncenter {
+	margin-right: auto;
+	margin-left: auto;
+}
+
+img.alignright,
+.wp-caption.alignright {
+	margin-left: auto;
 }
