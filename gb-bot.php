@@ -221,9 +221,9 @@ class GBBot {
 
 		// Admin custom styles
 		$gbbot_admin_css = $this->settings['gbbot_admin_css'];
-		if ($gbbot_admin_css) {
+		if (!empty($gbbot_admin_css)) {
 			add_action('admin_head', function() use ($gbbot_admin_css) {
-				echo '<style>' . $gbbot_admin_css . "</style>";
+				echo '<style>' . stripslashes($gbbot_admin_css) . "</style>";
 			});
 		}
 	}
