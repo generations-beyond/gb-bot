@@ -111,6 +111,13 @@ class GBBot {
 
 		// Add admin notices
 		add_action('admin_notices', function() {
+			// Show if the current environment is not production
+			if ($this->is_staging) {
+				echo '<div class="notice notice-warning">
+					<p><b>Notice:</b> Search engine indexing has been discouraged because GB&bull;BOT has identified this server as a <b>staging/development</b> server.</p>
+				</div>';
+			}
+
 			// Only show if current user is a super user
 			if ($this->is_super_user) {
 				global $pagenow;
@@ -193,6 +200,22 @@ class GBBot {
 				wp_enqueue_script($plugin_name . '-settings', $gbbot_theme_dir.'assets/scripts/settings.js', array('jquery'), $version);
 			}
 		});
+
+		// Determine if we're in a staging/development environment
+		if (wp_get_environment_type() !== 'production'
+			|| substr($_SERVER['HTTP_HOST'], 0, 4) === "dev."
+			|| substr($_SERVER['HTTP_HOST'], 0, 12) === "development."
+		) {
+			$this->is_staging = true;
+			// Discourage the site from being indexed by search engines
+			add_filter('robots_txt', function($output, $public) {
+					$robots_txt = "User-agent: *\n";
+					$robots_txt .= "Disallow: /";
+					return $robots_txt;
+			}, 10,  2);
+		} else {
+			$this->is_staging = false;
+		}
 	}
 
 	/**
