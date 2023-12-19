@@ -108,6 +108,28 @@ class GBBot {
 				}
 			});
 		}
+
+		// Add admin notices
+		add_action('admin_notices', function() {
+			// Only show if current user is a super user
+			if ($this->is_super_user) {
+				global $pagenow;
+				if ( $pagenow == 'plugins.php' ) {
+					// Detect a change in WP_PLUGIN_DIR
+					if (WP_PLUGIN_DIR !== substr_replace(get_theme_root(), "", -6)."plugins") {
+						echo '<div class="notice notice-warning">
+							<p><b>Warning:</b> <code>WP_PLUGIN_DIR</code> has been modified in <code>wp-config.php</code>.</p>
+						</div>';
+					}
+					// Detect a change in WPMU_PLUGIN_DIR
+					if (WPMU_PLUGIN_DIR !== substr_replace(get_theme_root(), "", -6)."mu-plugins") {
+						echo '<div class="notice notice-warning">
+							<p><b>Warning:</b> <code>WPMU_PLUGIN_DIR</code> has been modified in <code>wp-config.php</code>.</p>
+						</div>';
+					}
+				}
+			}
+		});
 	}
 	
 	/**
