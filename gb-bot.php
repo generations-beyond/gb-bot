@@ -9,6 +9,7 @@
 * License: GPLv3
 * Text Domain: gb-bot
 **/
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 // Check if GB Theme Core is active
 global $GBTC_ACTIVE;
@@ -31,12 +32,13 @@ if ($GBTC_ACTIVE) {
 
 	// Plugin Update Checker Support
 	require 'plugin-update-checker/plugin-update-checker.php';
-	$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	$gbBotUpdateChecker = PucFactory::buildUpdateChecker(
 		'https://github.com/generations-beyond/gb-bot/',
 		__FILE__,
 		'gb-bot'
 	);
 	$gbBotUpdateChecker->setBranch(get_option('gbbot_active_branch', 'master'));
+	$gbBotUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 }
 
