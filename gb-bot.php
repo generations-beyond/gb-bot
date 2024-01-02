@@ -3,12 +3,13 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: Make your website do more stuff.
-* Version: 1.3.8
+* Version: 1.4.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
 * Text Domain: gb-bot
 **/
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 // Check if GB Theme Core is active
 global $GBTC_ACTIVE;
@@ -31,12 +32,13 @@ if ($GBTC_ACTIVE) {
 
 	// Plugin Update Checker Support
 	require 'plugin-update-checker/plugin-update-checker.php';
-	$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	$gbBotUpdateChecker = PucFactory::buildUpdateChecker(
 		'https://github.com/generations-beyond/gb-bot/',
 		__FILE__,
 		'gb-bot'
 	);
 	$gbBotUpdateChecker->setBranch(get_option('gbbot_active_branch', 'master'));
+	$gbBotUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 }
 
