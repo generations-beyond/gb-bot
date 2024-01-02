@@ -1,13 +1,13 @@
 === GB&bull;BOT ===
 Contributors: genbeyond
 Requires at least: 6.1.1
-Tested up to: 6.1.1
-Stable tag: 1.3.7
+Tested up to: 6.4.2
+Stable tag: 1.4.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Make your website do more stuff.
+A collection of useful functions and features to proactively enhance your website.
 
 == Description ==
 
@@ -33,6 +33,13 @@ Adds a button that returns the user to the top of the page when clicked.
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.4.0 - 2024-01-02
+* Fix: Empty Parent Page template not working properly.
+* Fix: Single and double quotes get improperly escaped in the Admin CSS box.
+* Fix: "Edit Settings" button appears on dashboard widget for non-admins.
+* Enhancement: Add a warning for when the `WP_PLUGIN_DIR` is set.
+* Enhancement: Discourage search engines from viewing dev/staging sites.
 
 #### 1.3.7 - 2023-04-17
 * Bug fixes.

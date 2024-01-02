@@ -2,13 +2,14 @@
 /**
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
-* Description: Make your website do more stuff.
-* Version: 1.3.7
+* Description: A collection of useful functions and features to proactively enhance your website.
+* Version: 1.4.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
 * Text Domain: gb-bot
 **/
+use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
 // Check if GB Theme Core is active
 global $GBTC_ACTIVE;
@@ -31,12 +32,13 @@ if ($GBTC_ACTIVE) {
 
 	// Plugin Update Checker Support
 	require 'plugin-update-checker/plugin-update-checker.php';
-	$gbBotUpdateChecker = Puc_v4_Factory::buildUpdateChecker(
+	$gbBotUpdateChecker = PucFactory::buildUpdateChecker(
 		'https://github.com/generations-beyond/gb-bot/',
 		__FILE__,
 		'gb-bot'
 	);
 	$gbBotUpdateChecker->setBranch(get_option('gbbot_active_branch', 'master'));
+	$gbBotUpdateChecker->getVcsApi()->enableReleaseAssets();
 
 }
 
@@ -108,6 +110,35 @@ class GBBot {
 				}
 			});
 		}
+
+		// Add admin notices
+		add_action('admin_notices', function() {
+			// Show if the current environment is not production
+			if ($this->is_staging) {
+				echo '<div class="notice notice-warning">
+					<p><b>Notice:</b> Search engine indexing has been discouraged because GB&bull;BOT has identified this server as a <b>staging/development</b> server.</p>
+				</div>';
+			}
+
+			// Only show if current user is a super user
+			if ($this->is_super_user) {
+				global $pagenow;
+				if ( $pagenow == 'plugins.php' ) {
+					// Detect a change in WP_PLUGIN_DIR
+					if (WP_PLUGIN_DIR !== substr_replace(get_theme_root(), "", -6)."plugins") {
+						echo '<div class="notice notice-warning">
+							<p><b>Warning:</b> <code>WP_PLUGIN_DIR</code> has been modified in <code>wp-config.php</code>.</p>
+						</div>';
+					}
+					// Detect a change in WPMU_PLUGIN_DIR
+					if (WPMU_PLUGIN_DIR !== substr_replace(get_theme_root(), "", -6)."mu-plugins") {
+						echo '<div class="notice notice-warning">
+							<p><b>Warning:</b> <code>WPMU_PLUGIN_DIR</code> has been modified in <code>wp-config.php</code>.</p>
+						</div>';
+					}
+				}
+			}
+		});
 	}
 	
 	/**
@@ -171,6 +202,22 @@ class GBBot {
 				wp_enqueue_script($plugin_name . '-settings', $gbbot_theme_dir.'assets/scripts/settings.js', array('jquery'), $version);
 			}
 		});
+
+		// Determine if we're in a staging/development environment
+		if (wp_get_environment_type() !== 'production'
+			|| substr($_SERVER['HTTP_HOST'], 0, 4) === "dev."
+			|| substr($_SERVER['HTTP_HOST'], 0, 12) === "development."
+		) {
+			$this->is_staging = true;
+			// Discourage the site from being indexed by search engines
+			add_filter('robots_txt', function($output, $public) {
+					$robots_txt = "User-agent: *\n";
+					$robots_txt .= "Disallow: /";
+					return $robots_txt;
+			}, 10,  2);
+		} else {
+			$this->is_staging = false;
+		}
 	}
 
 	/**
@@ -204,16 +251,26 @@ class GBBot {
 		}, 10, 2);
 
 		// Add empty page parent template
-		add_filter( 'theme_page_templates', function() {
-			$templates[plugin_dir_path( __FILE__ ) . 'templates/empty-parent-page.php'] = __( 'Empty Parent Page', 'gb-bot' );
+		add_filter( 'theme_page_templates', function($templates) {
+			$templates[ str_replace( '\\', '/', plugin_dir_path( __FILE__ ) ) . 'templates/empty-parent-page.php'] = __( 'Empty Parent Page', 'gb-bot' );
 			return $templates;
 		} );
+		// Change the page template to the selected template on the dropdown
+		add_filter( 'template_include', function($template) {
+			if (is_page()) {
+				$meta = get_post_meta(get_the_ID());
+				if (!empty($meta['_wp_page_template'][0]) && strpos( $meta['_wp_page_template'][0], $this->plugin->name) && $meta['_wp_page_template'][0] != $template) {
+					$template = $meta['_wp_page_template'][0];
+				}
+			}
+			return $template;
+		}, 99 );
 
 		// Admin custom styles
 		$gbbot_admin_css = $this->settings['gbbot_admin_css'];
-		if ($gbbot_admin_css) {
+		if (!empty($gbbot_admin_css)) {
 			add_action('admin_head', function() use ($gbbot_admin_css) {
-				echo '<style>' . $gbbot_admin_css . "</style>";
+				echo '<style>' . stripslashes($gbbot_admin_css) . "</style>";
 			});
 		}
 	}

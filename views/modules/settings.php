@@ -205,7 +205,7 @@
 								<tr>
 									<th scope="row">Custom CSS</th>
 									<td>
-										<textarea name="gbbot_admin_css" type="text" id="gbbot_admin_css" class="large-text code" rows="10" cols="50"><?= $this->settings['gbbot_admin_css'] ?></textarea>
+										<textarea name="gbbot_admin_css" type="text" id="gbbot_admin_css" class="large-text code" rows="10" cols="50"><?= stripslashes($this->settings['gbbot_admin_css']) ?></textarea>
 									</td>
 								</tr>
 							</tbody>
