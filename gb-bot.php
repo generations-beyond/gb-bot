@@ -270,7 +270,7 @@ class GBBot {
 		$gbbot_admin_css = $this->settings['gbbot_admin_css'];
 		if (!empty($gbbot_admin_css)) {
 			add_action('admin_head', function() use ($gbbot_admin_css) {
-				echo '<style>' . stripslashes($gbbot_admin_css) . "</style>";
+				echo '<style>' . preg_replace('%\\\\"%', '"', $gbbot_admin_css) . "</style>";
 			});
 		}
 	}
