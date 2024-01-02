@@ -7,7 +7,7 @@ Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-Make your website do more stuff.
+A collection of useful functions and features to proactively enhance your website.
 
 == Description ==
 
@@ -34,8 +34,12 @@ An easy way to identify all of the elements used in your Elementor-built website
 
 == Changelog ==
 
-#### 1.3.8 - 2023-04-21
-* Fixed bug with Empty Parent Page
+#### 1.4.0 - 2024-01-02
+* Fix: Empty Parent Page template not working properly.
+* Fix: Single and double quotes get improperly escaped in the Admin CSS box.
+* Fix: "Edit Settings" button appears on dashboard widget for non-admins.
+* Enhancement: Add a warning for when the `WP_PLUGIN_DIR` is set.
+* Enhancement: Discourage search engines from viewing dev/staging sites.
 
 #### 1.3.7 - 2023-04-17
 * Bug fixes.

@@ -2,7 +2,7 @@
 /**
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
-* Description: Make your website do more stuff.
+* Description: A collection of useful functions and features to proactively enhance your website.
 * Version: 1.4.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
