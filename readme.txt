@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 6.1.1
 Tested up to: 6.4.2
-Stable tag: 1.4.0
+Stable tag: 1.4.1
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -33,6 +33,16 @@ Adds a button that returns the user to the top of the page when clicked.
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.4.1 - 2024-03-26
+* Security: Patch for CVE-2024-29180.
+* Security: Patch for CVE-2024-28849.
+* Security: Patch for CVE-2023-46234.
+* Security: Patch for CVE-2023-45857.
+* Security: Patch for CVE-2023-45133.
+* Security: Patch for CVE-2023-44270.
+* Security: Patch for CVE-2023-32695.
+* Security: Patch for CVE-2023-26159.
 
 #### 1.4.0 - 2024-01-02
 * Fix: Empty Parent Page template not working properly.
