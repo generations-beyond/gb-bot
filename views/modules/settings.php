@@ -241,11 +241,12 @@
 										<th scope="row">Show this name instead</th>
 										<td>
 											<select name="gbbot_rank_math_author_replacement" id="gbbot_rank_math_author_replacement">
-												<option value="0" <?= $author_replacement == 0 ? 'selected' : '' ?>><?= 'Website Name' ?></option>
 												<?php 
 													$author_replacement =$this->settings['gbbot_rank_math_author_replacement'];
 													$users = get_users(['orderby' => 'ID']);
-													foreach ($users as $user) :
+													?>
+														<option value="0" <?= $author_replacement == 0 ? 'selected' : '' ?>><?= 'Website Name' ?></option>
+													<?php foreach ($users as $user) :
 														?>
 															<option value="<?= $user->ID ?>" <?= $author_replacement == $user->ID ? 'selected' : '' ?>><?= $user->display_name ?></option>
 														<?php
