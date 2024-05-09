@@ -332,7 +332,7 @@ function remove_higher_levels($all_roles) {
 }
 
 // Rank Math check
-if( is_plugin_active('seo-by-rank-math/rank-math.php') ) {
+if( $gbbot->active_plugins['rank-math'] ) {
     /**
      * Fix Rank Math issue where it doesn't use the default 
      * OpenGraph image if another image exists on the page
@@ -515,7 +515,7 @@ if( !$GBTC_ACTIVE ) {
     }
 
     // Add Alpine.js attribute options to every Elementor Pro widget
-    if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
+    if ($gbbot->active_plugins['elementor-pro']) {
         add_action('elementor/element/before_section_end', function( $section, $section_id, $args ) {
             if( $section_id == '_section_attributes' ){
                 $repeater = new \Elementor\Repeater();
