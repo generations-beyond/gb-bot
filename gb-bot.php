@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: A collection of useful functions and features to proactively enhance your website.
-* Version: 1.4.1
+* Version: 1.5.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -63,6 +63,9 @@ class GBBot {
 
 		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
 		$this->GBTC_ACTIVE_CLASS = 'notice-warning notice-alt';
+
+		// Check availability of other plugins
+		$this->checkActivePlugins();
 
 		// Register frontend notices
 		$this->registerNotices();
@@ -139,6 +142,20 @@ class GBBot {
 				}
 			}
 		});
+	}
+	
+	/**
+	 * Check whether related plugins are activated
+	 */
+	function checkActivePlugins() {
+		$plugins_to_check = [
+			'elementor-pro' => 'elementor-pro/elementor-pro.php',
+			'rank-math' => 'seo-by-rank-math/rank-math.php',
+		];
+		$this->active_plugins = [];
+		foreach ($plugins_to_check as $key=>$plugin) {
+			$this->active_plugins[$key] = is_plugin_active($plugin);
+		}
 	}
 	
 	/**
@@ -235,7 +252,7 @@ class GBBot {
 			wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir.'assets/scripts/frontend.js', array('jquery'), $version);
 			
 			// AlpineJS
-			if (is_plugin_active( 'elementor-pro/elementor-pro.php' )) {
+			if ($this->active_plugins['elementor-pro']) {
 				if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false) ) {
 					wp_enqueue_script( 'gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
 				}
@@ -328,6 +345,8 @@ class GBBot {
 			'gbbot_active_branch' => get_option('gbbot_active_branch', ''),
 			'gbbot_super_users' => get_option('gbbot_super_users', []),
 			'gbbot_admin_css' => get_option('gbbot_admin_css', ''),
+			'gbbot_rank_math_author_blacklist' => get_option('gbbot_rank_math_author_blacklist', []),
+			'gbbot_rank_math_author_replacement' => get_option('gbbot_rank_math_author_replacement', 0),
 		);
 	}
 
@@ -433,6 +452,12 @@ class GBBot {
 
 							// Admin CSS
 							$this->updateOrDeleteOption('gbbot_admin_css', ($_REQUEST['gbbot_admin_css'] ?? null));
+
+							// Rank Math SEO - "Written By" Override
+							if ($this->active_plugins['rank-math']) {
+								$this->updateOrDeleteOption('gbbot_rank_math_author_blacklist', ($_REQUEST['gbbot_rank_math_author_blacklist'] ?? null));
+								$this->updateOrDeleteOption('gbbot_rank_math_author_replacement', ($_REQUEST['gbbot_rank_math_author_replacement'] ?? null));
+							}
 						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );

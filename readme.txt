@@ -1,8 +1,8 @@
 === GB&bull;BOT ===
 Contributors: genbeyond
 Requires at least: 6.1.1
-Tested up to: 6.4.2
-Stable tag: 1.4.1
+Tested up to: 6.5.3
+Stable tag: 1.5.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -33,6 +33,10 @@ Adds a button that returns the user to the top of the page when clicked.
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.5.0 - 2024-05-09
+* Security: Update dependencies.
+* Enhancement: Rank Math SEO's structured data for author can now be overridden with an advanced setting.
 
 #### 1.4.1 - 2024-03-26
 * Security: Patch for CVE-2024-29180.

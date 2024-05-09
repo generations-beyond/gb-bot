@@ -33,69 +33,66 @@
 				</div>
 			</div>
 			
-				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
-					<div class="inside">
-						<p>
-							Adds inline image thumbnails to admin columns for the selected post types.
-						</p>
-						<table class="form-table">
-							<tbody>
-								<tr>
-									<th scope="row">Post Types</th>
-									<td>
-										<?php 
-											$post_types = get_post_types( [], 'objects');
-											$enabled_post_types = get_option('gbbot_featured_image_post_types', []);
-											foreach ($post_types as $post_type) :
-												if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
-													?>
-														<label>
-															<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, ($enabled_post_types ?: [])) ? 'checked' : '' ?>>
-															<?=$post_type->label?>
-														</label><br>
-														<?php
-												endif;
-											endforeach;
-											?>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
-					</div>
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
+				<div class="inside">
+					<p>
+						Adds inline image thumbnails to admin columns for the selected post types.
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Post Types</th>
+								<td>
+									<?php 
+										$post_types = get_post_types( [], 'objects');
+										$enabled_post_types = get_option('gbbot_featured_image_post_types', []);
+										foreach ($post_types as $post_type) :
+											if($post_type->public && !in_array( $post_type->name, ['attachment','elementor_library'] )) :
+												?>
+													<label>
+														<input name="gbbot_featured_image_post_types[]" type="checkbox" value='<?=$post_type->name?>' <?= in_array($post_type->name, ($enabled_post_types ?: [])) ? 'checked' : '' ?>>
+														<?=$post_type->label?>
+													</label><br>
+													<?php
+											endif;
+										endforeach;
+									?>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
-					<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
-					<div class="inside">
-						<p>
-							Adds a button that returns the user to the top of the page when clicked.
-						</p>
-						<table class="form-table">
-							<tbody>
-								<tr>
-									<th scope="row">Location</th>
-									<td>
-										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_right' ? 'checked' : '' ?> > 
-											Bottom Right
-										</label><br>
-										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='bottom_left' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_left' ? 'checked' : '' ?> > 
-											Bottom Left
-										</label><br>
-										<label>
-											<input name="gbbot_enable_return_to_top" type="radio" value='none' <?= $this->settings['gbbot_enable_return_to_top'] == 'none' ? 'checked' : '' ?> > 
-											None (disabled)
-										</label>
-									</td>
-								</tr>
-								
-							</tbody>
-						</table>
-					</div>
+			</div>
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
+				<div class="inside">
+					<p>
+						Adds a button that returns the user to the top of the page when clicked.
+					</p>
+					<table class="form-table">
+						<tbody>
+							<tr>
+								<th scope="row">Location</th>
+								<td>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='bottom_right' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_right' ? 'checked' : '' ?> > 
+										Bottom Right
+									</label><br>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='bottom_left' <?= $this->settings['gbbot_enable_return_to_top'] == 'bottom_left' ? 'checked' : '' ?> > 
+										Bottom Left
+									</label><br>
+									<label>
+										<input name="gbbot_enable_return_to_top" type="radio" value='none' <?= $this->settings['gbbot_enable_return_to_top'] == 'none' ? 'checked' : '' ?> > 
+										None (disabled)
+									</label>
+								</td>
+							</tr>
+						</tbody>
+					</table>
 				</div>
-
+			</div>
 		</div>
 
 		<div class="gbbot-form-options" data-nav="integrations">
@@ -212,6 +209,56 @@
 						</table>
 					</div>
 				</div>
+
+				<?php if ($this->active_plugins['rank-math']) : ?>
+					<div class="postbox">
+						<h3>Rank Math SEO - "Written By" Override</h3>
+						<?= $this->notices['super_user_only'] ?>
+						<div class="inside">
+							<p>
+								Rank Math SEO includes structured data that displays the author of a page when the URL is pasted into Slack and similar apps.<br/>
+								This feature allows you to ensure that selected names are never displayed as the author of content.
+							</p>
+							<table class="form-table">
+								<tbody>
+									<tr>
+										<th scope="row">Never show these users as the author</th>
+										<td>
+											<select name="gbbot_rank_math_author_blacklist[]" id="gbbot_rank_math_author_blacklist" multiple>
+												<?php 
+													$author_blacklist =$this->settings['gbbot_rank_math_author_blacklist'];
+													$users = get_users(['orderby' => 'ID']);
+													foreach ($users as $user) :
+														?>
+															<option value="<?= $user->display_name ?>" <?= in_array($user->display_name, $author_blacklist) ? 'selected' : '' ?>><?= $user->display_name ?></option>
+														<?php
+													endforeach;
+												?>
+											</select>
+										</td>
+									</tr>
+									<tr>
+										<th scope="row">Show this name instead</th>
+										<td>
+											<select name="gbbot_rank_math_author_replacement" id="gbbot_rank_math_author_replacement">
+												<option value="0" <?= $author_replacement == 0 ? 'selected' : '' ?>><?= 'Website Name' ?></option>
+												<?php 
+													$author_replacement =$this->settings['gbbot_rank_math_author_replacement'];
+													$users = get_users(['orderby' => 'ID']);
+													foreach ($users as $user) :
+														?>
+															<option value="<?= $user->ID ?>" <?= $author_replacement == $user->ID ? 'selected' : '' ?>><?= $user->display_name ?></option>
+														<?php
+													endforeach;
+												?>
+											</select>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 			
