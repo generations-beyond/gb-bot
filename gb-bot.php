@@ -3,7 +3,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: A collection of useful functions and features to proactively enhance your website.
-* Version: 1.4.1
+* Version: 1.5.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -345,6 +345,8 @@ class GBBot {
 			'gbbot_active_branch' => get_option('gbbot_active_branch', ''),
 			'gbbot_super_users' => get_option('gbbot_super_users', []),
 			'gbbot_admin_css' => get_option('gbbot_admin_css', ''),
+			'gbbot_rank_math_author_blacklist' => get_option('gbbot_rank_math_author_blacklist', []),
+			'gbbot_rank_math_author_replacement' => get_option('gbbot_rank_math_author_replacement', 0),
 		);
 	}
 
@@ -450,6 +452,12 @@ class GBBot {
 
 							// Admin CSS
 							$this->updateOrDeleteOption('gbbot_admin_css', ($_REQUEST['gbbot_admin_css'] ?? null));
+
+							// Rank Math SEO - "Written By" Override
+							if ($this->active_plugins['rank-math']) {
+								$this->updateOrDeleteOption('gbbot_rank_math_author_blacklist', ($_REQUEST['gbbot_rank_math_author_blacklist'] ?? null));
+								$this->updateOrDeleteOption('gbbot_rank_math_author_replacement', ($_REQUEST['gbbot_rank_math_author_replacement'] ?? null));
+							}
 						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );

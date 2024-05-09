@@ -348,6 +348,64 @@ if( $gbbot->active_plugins['rank-math'] ) {
     add_filter( 'rank_math/metabox/priority', function( $priority ) {
         return 'low';
     });
+
+    /**
+    * A few filters to replace Rank Math's author schema with a predefined user.
+    */
+    add_action( 'init', function () {
+        $author_blacklist = get_option('gbbot_rank_math_author_blacklist', []); // Array of display names of unwanted authors.
+        $author_replacement_id = get_option('gbbot_rank_math_author_replacement', 0);; // User ID of new author. Use non-existing ID to default to Site info.
+        $author_replacement_exists = get_userdata($author_replacement_id) !== false;
+        $author_replacement = array(
+            'name' => $author_replacement_exists ? get_the_author_meta('display_name', $author_replacement_id) : get_bloginfo('name'),
+            'description' => $author_replacement_exists ? get_the_author_meta('description', $author_replacement_id) : '',
+            'url' => esc_url($author_replacement_exists ? get_the_author_meta('user_url', $author_replacement_id) : get_bloginfo('url')),
+            'image' => $author_replacement_exists ? get_avatar_url($author_replacement_id, 96) : get_site_icon_url(96),
+        );
+
+        add_filter('rank_math/opengraph/slack_enhanced_data', function($data) use ($author_replacement, $author_blacklist) {
+            if (isset($data['Written by'])) {
+                if (in_array($data['Written by'], $author_blacklist)) {
+                    $data['Written by'] = $author_replacement['name'];
+                }
+            }
+            return $data;
+        });
+        add_filter('rank_math/snippet/rich_snippet_article_entity', function($data) use ($author_replacement, $author_blacklist) {
+            if (isset($data['author'])) {
+                if (in_array($data['author']['name'], $author_blacklist)) {
+                    $data['author'] = array(
+                        '@id' => $data['author']['@id'] ?? '',
+                        'name' => $author_replacement['name'],
+                    );
+                }
+            }
+            return $data;
+        });
+        add_filter('rank_math/json_ld', function($data, $jsonld) use ($author_replacement, $author_blacklist) {
+            if (isset($data['ProfilePage'])) {
+                if (in_array($data['ProfilePage']['name'], $author_blacklist)) {
+                    $data['ProfilePage'] = array(
+                        '@type' => $data['ProfilePage']['@type'] ?? '',
+                        '@id' => $data['ProfilePage']['@id'] ?? '',
+                        'name' => $author_replacement['name'],
+                        'description' => $author_replacement['description'],
+                        'url' => $author_replacement['url'],
+                        'image' => array(
+                            '@type' => 'ImageObject',
+                            '@id' => $author_replacement['image'],
+                            'url' => $author_replacement['image'],
+                            'width' => 96,
+                            'height' => 96,
+                            'caption' => $author_replacement['name'],
+                            'inLanguage' => 'en-US',
+                        ),
+                    );
+                }
+            }
+            return $data;
+        }, 99, 2);
+    });
 }
 
 // Add following functions only if GBTC is inactive
