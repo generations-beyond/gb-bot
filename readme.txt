@@ -36,7 +36,7 @@ An easy way to identify all of the elements used in your Elementor-built website
 
 #### 1.5.0 - 2024-05-09
 * Security: Update dependencies.
-* Enhancement: Rank Math SEO's structured data for author can now be overriden with an advanced setting.
+* Enhancement: Rank Math SEO's structured data for author can now be overridden with an advanced setting.
 
 #### 1.4.1 - 2024-03-26
 * Security: Patch for CVE-2024-29180.
