@@ -468,10 +468,8 @@ class GBBot {
 							$this->updateOrDeleteOption('gbbot_admin_css', ($_REQUEST['gbbot_admin_css'] ?? null));
 
 							// Rank Math SEO - "Written By" Override
-							if ($this->active_plugins['rank-math']) {
-								$this->updateOrDeleteOption('gbbot_rank_math_author_blacklist', ($_REQUEST['gbbot_rank_math_author_blacklist'] ?? null));
-								$this->updateOrDeleteOption('gbbot_rank_math_author_replacement', ($_REQUEST['gbbot_rank_math_author_replacement'] ?? null));
-							}
+							$this->updateOrDeleteOption('gbbot_rank_math_author_blacklist', ($_REQUEST['gbbot_rank_math_author_blacklist'] ?? null));
+							$this->updateOrDeleteOption('gbbot_rank_math_author_replacement', ($_REQUEST['gbbot_rank_math_author_replacement'] ?? null));
 						}
 
 						$this->message = __( 'Settings Saved. Refresh the page to see the changes.', 'gb-bot' );
