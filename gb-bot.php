@@ -62,7 +62,7 @@ class GBBot {
 		$this->plugin->url          = plugin_dir_url( __FILE__ );
 
 		$this->GBTC_ACTIVE = $GBTC_ACTIVE;
-		$this->GBTC_ACTIVE_CLASS = 'notice-warning notice-alt';
+		$this->WARNING_CLASS = 'notice-warning notice-alt';
 
 		// Check availability of other plugins
 		$this->checkActivePlugins();
@@ -357,11 +357,11 @@ class GBBot {
 		$this->notices = array(
 			'gbtc_warning_label' => '<span style="color:red;font-weight:700;">*</span>',
 			'gbtc_warning' => <<<EOD
-				<div class="postbox {$this->GBTC_ACTIVE_CLASS}">
+				<div class="postbox {$this->WARNING_CLASS}">
 					<h3><span style="color:red;font-weight:700">*</span> = GB Theme Core Detected</h3>
 					<div class="inside">
 						<p style="color:red">
-							GB Theme Core is currently activated. This means any options in these boxes will have no affect, however they can be pre-configured before switching themes. 
+							GB Theme Core is currently activated. This means any options in these boxes will have no affect. However, they can be pre-configured before switching themes. 
 						</p>
 						<p>
 							To get the most features out of {$this->plugin->displayName}, install and enable the <strong>Proactive by GB</strong> theme.
@@ -370,6 +370,20 @@ class GBBot {
 				</div>
 			EOD,
 			'super_user_only' => '<h3 style="position: absolute;background: #2271b1;color: white;top: 0;right: 0;">Super User Only</h3>',
+			'inactive_plugins_warning_label' => '<span style="color:red;font-weight:700;">**</span>',
+			'inactive_plugins_warning' => <<<EOD
+				<div class="postbox {$this->WARNING_CLASS}">
+					<h3><span style="color:red;font-weight:700">**</span> = Related Plugin is Deactivated</h3>
+					<div class="inside">
+						<p style="color:red">
+							A plugin related to this setting is currently deactivated or not installed.
+						</p>
+						<p>
+							Options in these boxes will have no affect. However, they can be pre-configured before activating the related plugin.
+						</p>
+					</div>
+				</div>
+			EOD,
 		);
 	}
 

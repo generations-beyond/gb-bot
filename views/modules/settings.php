@@ -33,7 +33,7 @@
 				</div>
 			</div>
 			
-			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->WARNING_CLASS : '' ?>">
 				<h3>Featured Image Admin Thumbnail <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 				<div class="inside">
 					<p>
@@ -64,7 +64,7 @@
 					</table>
 				</div>
 			</div>
-			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->WARNING_CLASS : '' ?>">
 				<h3>Back-to-Top Arrow <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 				<div class="inside">
 					<p>
@@ -144,7 +144,7 @@
 		</div>
 
 		<div class="gbbot-form-options" data-nav="advanced">
-			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+			<div class="postbox <?= $this->GBTC_ACTIVE ? $this->WARNING_CLASS : '' ?>">
 				<h3>Version Control <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 				<div class="inside">
 					<p>
@@ -167,7 +167,7 @@
 			</div>
 
 			<?php if ($this->is_super_user) : ?>
-				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->WARNING_CLASS : '' ?>">
 					<h3>Super Users <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<?= $this->notices['super_user_only'] ?>
 					<div class="inside">
@@ -190,7 +190,7 @@
 					</div>
 				</div>
 
-				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->GBTC_ACTIVE_CLASS : '' ?>">
+				<div class="postbox <?= $this->GBTC_ACTIVE ? $this->WARNING_CLASS : '' ?>">
 					<h3>Custom Admin Styles <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning_label'] : '' ?></h3>
 					<?= $this->notices['super_user_only'] ?>
 					<div class="inside">
@@ -210,56 +210,54 @@
 					</div>
 				</div>
 
-				<?php if ($this->active_plugins['rank-math']) : ?>
-					<div class="postbox">
-						<h3>Rank Math SEO - "Written By" Override</h3>
-						<?= $this->notices['super_user_only'] ?>
-						<div class="inside">
-							<p>
-								Rank Math SEO includes structured data that displays the author of a page when the URL is pasted into Slack and similar apps.<br/>
-								This feature allows you to ensure that selected names are never displayed as the author of content.
-							</p>
-							<table class="form-table">
-								<tbody>
-									<tr>
-										<th scope="row">Never show these users as the author</th>
-										<td>
-											<select name="gbbot_rank_math_author_blacklist[]" id="gbbot_rank_math_author_blacklist" multiple>
-												<?php 
-													$author_blacklist =$this->settings['gbbot_rank_math_author_blacklist'];
-													$users = get_users(['orderby' => 'ID']);
-													foreach ($users as $user) :
-														?>
-															<option value="<?= $user->display_name ?>" <?= in_array($user->display_name, $author_blacklist) ? 'selected' : '' ?>><?= $user->display_name ?></option>
-														<?php
-													endforeach;
-												?>
-											</select>
-										</td>
-									</tr>
-									<tr>
-										<th scope="row">Show this name instead</th>
-										<td>
-											<select name="gbbot_rank_math_author_replacement" id="gbbot_rank_math_author_replacement">
-												<?php 
-													$author_replacement =$this->settings['gbbot_rank_math_author_replacement'];
-													$users = get_users(['orderby' => 'ID']);
+				<div class="postbox <?= !$this->active_plugins['rank-math'] ? $this->WARNING_CLASS : '' ?>">
+					<h3>Rank Math SEO - "Written By" Override <?= !$this->active_plugins['rank-math'] ? $this->notices['inactive_plugins_warning_label'] : '' ?></h3>
+					<?= $this->notices['super_user_only'] ?>
+					<div class="inside">
+						<p>
+							Rank Math SEO includes structured data that displays the author of a page when the URL is pasted into Slack and similar apps.<br/>
+							This feature allows you to ensure that selected names are never displayed as the author of content.
+						</p>
+						<table class="form-table">
+							<tbody>
+								<tr>
+									<th scope="row">Never show these users as the author</th>
+									<td>
+										<select name="gbbot_rank_math_author_blacklist[]" id="gbbot_rank_math_author_blacklist" multiple>
+											<?php 
+												$author_blacklist =$this->settings['gbbot_rank_math_author_blacklist'];
+												$users = get_users(['orderby' => 'ID']);
+												foreach ($users as $user) :
 													?>
-														<option value="0" <?= $author_replacement == 0 ? 'selected' : '' ?>><?= 'Website Name' ?></option>
-													<?php foreach ($users as $user) :
-														?>
-															<option value="<?= $user->ID ?>" <?= $author_replacement == $user->ID ? 'selected' : '' ?>><?= $user->display_name ?></option>
-														<?php
-													endforeach;
+														<option value="<?= $user->display_name ?>" <?= in_array($user->display_name, $author_blacklist) ? 'selected' : '' ?>><?= $user->display_name ?></option>
+													<?php
+												endforeach;
+											?>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th scope="row">Show this name instead</th>
+									<td>
+										<select name="gbbot_rank_math_author_replacement" id="gbbot_rank_math_author_replacement">
+											<?php 
+												$author_replacement =$this->settings['gbbot_rank_math_author_replacement'];
+												$users = get_users(['orderby' => 'ID']);
 												?>
-											</select>
-										</td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
+													<option value="0" <?= $author_replacement == 0 ? 'selected' : '' ?>><?= 'Website Name' ?></option>
+												<?php foreach ($users as $user) :
+													?>
+														<option value="<?= $user->ID ?>" <?= $author_replacement == $user->ID ? 'selected' : '' ?>><?= $user->display_name ?></option>
+													<?php
+												endforeach;
+											?>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
 					</div>
-				<?php endif; ?>
+				</div>
 			<?php endif; ?>
 		</div>
 			

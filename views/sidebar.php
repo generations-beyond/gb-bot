@@ -36,3 +36,6 @@
 
 <!-- GBTC WARNING MSG -->
 <?= $this->GBTC_ACTIVE ? $this->notices['gbtc_warning'] : '' ?>
+
+<!-- PLUGIN INACTIVE MESSAGE -->
+<?= in_array(false, $this->active_plugins) ? $this->notices['inactive_plugins_warning'] : '' ?>
