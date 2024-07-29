@@ -1,4 +1,8 @@
-<?php include("css/team-metabox.css"); ?>
+<?php
+
+include("css/team-metabox.css");
+
+?>
 <div class="team-details-wrap">
     <div class="flex-row name"> 
         <label for="_<?=$post_type?>-name">Name</label>
@@ -28,7 +32,7 @@
     <div class="flex-row description">
         <div class="input-field-wrap description">
             <label for="_<?=$post_type?>-description">Description</label>
-            <?=wp_editor( $team_description, '_'.$post_type.'-description', array() );?>
+            <?=wp_editor($team_description, '_' . $post_type . '-description', array());?>
         </div>
     </div><!-- flex-row -->
     <div class="flex-row contact"> 
