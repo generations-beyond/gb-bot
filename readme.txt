@@ -34,8 +34,9 @@ An easy way to identify all of the elements used in your Elementor-built website
 
 == Changelog ==
 
-#### 1.5.1 - 2024-07-26
+#### 1.5.1 - 2024-07-29
 * Code Quality: Implemented PSR-12 Coding Style.
+* Enhancement: Added the ability to enable/disable the dashboard widget.
 
 #### 1.5.0 - 2024-05-09
 * Security: Update dependencies.
