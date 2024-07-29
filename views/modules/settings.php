@@ -4,6 +4,23 @@
     <div id="post-body-content">
         <div class="gbbot-form-options" data-nav="general">
             <div class="postbox">
+                <h3>Dashboard Widget</h3>
+                <div class="inside">
+                    <p>
+                        Control whether or not to show the <?= $this->plugin->displayName ?> information widget on the WordPress dashboard.
+                    </p>
+                    <table class="form-table">
+                        <tbody>
+                            <tr>
+                                <th scope="row">Enable</th>
+                                <td><input name="gbbot_team_dashboard_widget_enable" type="checkbox" id="gbbot_team_dashboard_widget_enable" value='1' <?= $this->settings['gbbot_team_dashboard_widget_enable'] ? 'checked' : '' ?> ></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="postbox">
                 <h3>"Team Member" Custom Post Type</h3>
                 <div class="inside">
                     <p>

@@ -86,8 +86,14 @@ class GBBot
         }
 
         add_action('admin_init', array($this, 'registerSettings'));
-        add_action('wp_dashboard_setup', array($this, 'registerDashboardWidget'));
         add_action('admin_menu', array($this, 'registerAdminPanel'));
+
+        // Register Dashboard Widget if not disabled
+        if ($this->settings['gbbot_team_dashboard_widget_enable']) {
+            add_action('wp_dashboard_setup', array($this, 'registerDashboardWidget'));
+        }
+
+        // Frontend output
         add_action('wp_footer', array($this, 'outputReBoundTrackingCode'));
 
         // CPT actions
@@ -348,6 +354,8 @@ class GBBot
     {
         $this->settings = array(
             // General
+            'gbbot_team_dashboard_widget_enable' => get_option('gbbot_team_dashboard_widget_enable', true),
+
             'gbbot_team_cpt_enable' => get_option('gbbot_team_cpt_enable', false),
             'gbbot_team_post_label' => get_option('gbbot_team_post_label', ''),
             'gbbot_team_post_type' => get_option('gbbot_team_post_type', ''),
@@ -411,7 +419,7 @@ class GBBot
     */
     public function updateOrDeleteOption($option, $value)
     {
-        if (is_null($value) || empty($value)) {
+        if (is_null($value) || (empty($value) && $value !== 0)) {
             delete_option($option);
         } else {
             update_option($option, $value);
@@ -451,6 +459,8 @@ class GBBot
                         /**
                         * GENERAL TAB
                         */
+                        // Dashboard Widget
+                        $this->updateOrDeleteOption('gbbot_team_dashboard_widget_enable', ($_REQUEST['gbbot_team_dashboard_widget_enable'] ?? 0));
 
                         // Team CPT
                         $this->updateOrDeleteOption('gbbot_team_cpt_enable', ($_REQUEST['gbbot_team_cpt_enable'] ?? null));
