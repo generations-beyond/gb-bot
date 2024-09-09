@@ -1,6 +1,6 @@
 {
   "name": "gb-bot",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "description": "=== GB&bull;BOT ===\r Contributors: genbeyond\r Requires at least: 6.1.1\r Tested up to: 6.5.3\r Stable tag: 1.2.1\r Requires PHP: 7.4\r License: GPLv3\r License URI: https://www.gnu.org/licenses/gpl-3.0.html",
   "main": "index.js",
   "scripts": {
