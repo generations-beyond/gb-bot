@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 6.1.1
 Tested up to: 6.6.1
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -33,6 +33,9 @@ Adds a button that returns the user to the top of the page when clicked.
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.5.3 - 2024-12-21
+* Fix: Minor conflict caused by new debug messaging in WordPress 6.7.0.
 
 #### 1.5.2 - 2024-09-09
 * General: License and Readme updates.
