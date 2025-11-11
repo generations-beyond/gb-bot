@@ -250,10 +250,11 @@ class GBBot
         });
 
         // Determine if we're in a staging/development environment
+        $domain = preg_replace('#^https?://#', '', home_url());
         if (
             wp_get_environment_type() !== 'production'
-            || substr($_SERVER['HTTP_HOST'], 0, 4) === "dev."
-            || substr($_SERVER['HTTP_HOST'], 0, 12) === "development."
+            || substr($domain, 0, 4) === "dev."
+            || substr($domain, 0, 12) === "development."
         ) {
             $this->is_staging = true;
             // Discourage the site from being indexed by search engines
