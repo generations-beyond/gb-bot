@@ -304,6 +304,7 @@ add_action('elementor_pro/forms/validation/email', function ($field, $record, $a
         "eric@talkwithwebvisitor.com",
         "eric.jones.z.mail@gmail.com",
         "eric@talkwithcustomer.com",
+        "ericjonesmyemail@gmail.com",
     );
     if (in_array($field['value'], $spamemails)) {
         $ajax_handler->add_error($field['id'], 'We do not like spam, try another email address.');
