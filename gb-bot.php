@@ -55,6 +55,8 @@ class GBBot
     public $is_staging;
     public $super_users;
     public $is_super_user;
+    public $message;
+    public $errorMessage;
 
     /**
     * Constructor
