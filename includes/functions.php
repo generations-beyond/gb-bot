@@ -304,6 +304,7 @@ add_action('elementor_pro/forms/validation/email', function ($field, $record, $a
         "eric@talkwithwebvisitor.com",
         "eric.jones.z.mail@gmail.com",
         "eric@talkwithcustomer.com",
+        "ericjonesmyemail@gmail.com",
     );
     if (in_array($field['value'], $spamemails)) {
         $ajax_handler->add_error($field['id'], 'We do not like spam, try another email address.');
@@ -441,7 +442,7 @@ if (!$GBTC_ACTIVE) {
     {
         if ($column == 'image') {
             $image = get_the_post_thumbnail_url($post_id, "thumbnail");
-            if ($image == "") {
+            if (empty($image)) {
                 $image = plugin_dir_url(__FILE__) . '../assets/no-image.png';
             }
             echo '<img src=' . $image . ' style="max-height:100px;max-width:100px;height:auto;width:auto;">';

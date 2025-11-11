@@ -4,7 +4,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: A collection of useful functions and features to proactively enhance your website.
-* Version: 1.5.4
+* Version: 1.5.5
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -55,6 +55,8 @@ class GBBot
     public $is_staging;
     public $super_users;
     public $is_super_user;
+    public $message;
+    public $errorMessage;
 
     /**
     * Constructor
@@ -167,6 +169,7 @@ class GBBot
     public function checkActivePlugins()
     {
         $plugins_to_check = [
+            'elementor' => 'elementor/elementor.php',
             'elementor-pro' => 'elementor-pro/elementor-pro.php',
             'rank-math' => 'seo-by-rank-math/rank-math.php',
         ];
@@ -248,10 +251,11 @@ class GBBot
         });
 
         // Determine if we're in a staging/development environment
+        $domain = preg_replace('#^https?://#', '', home_url());
         if (
             wp_get_environment_type() !== 'production'
-            || substr($_SERVER['HTTP_HOST'], 0, 4) === "dev."
-            || substr($_SERVER['HTTP_HOST'], 0, 12) === "development."
+            || substr($domain, 0, 4) === "dev."
+            || substr($domain, 0, 12) === "development."
         ) {
             $this->is_staging = true;
             // Discourage the site from being indexed by search engines
@@ -281,7 +285,7 @@ class GBBot
             wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir . 'assets/scripts/frontend.js', array('jquery'), $version);
 
             // AlpineJS
-            if ($this->active_plugins['elementor-pro']) {
+            if ($this->active_plugins['elementor'] && $this->active_plugins['elementor-pro']) {
                 if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false)) {
                     wp_enqueue_script('gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
                 }
