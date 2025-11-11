@@ -442,7 +442,7 @@ if (!$GBTC_ACTIVE) {
     {
         if ($column == 'image') {
             $image = get_the_post_thumbnail_url($post_id, "thumbnail");
-            if ($image == "") {
+            if (empty($image)) {
                 $image = plugin_dir_url(__FILE__) . '../assets/no-image.png';
             }
             echo '<img src=' . $image . ' style="max-height:100px;max-width:100px;height:auto;width:auto;">';
