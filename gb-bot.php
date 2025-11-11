@@ -169,6 +169,7 @@ class GBBot
     public function checkActivePlugins()
     {
         $plugins_to_check = [
+            'elementor' => 'elementor/elementor.php',
             'elementor-pro' => 'elementor-pro/elementor-pro.php',
             'rank-math' => 'seo-by-rank-math/rank-math.php',
         ];
@@ -284,7 +285,7 @@ class GBBot
             wp_enqueue_script($plugin_name . '-frontend', $gbbot_theme_dir . 'assets/scripts/frontend.js', array('jquery'), $version);
 
             // AlpineJS
-            if ($this->active_plugins['elementor-pro']) {
+            if ($this->active_plugins['elementor'] && $this->active_plugins['elementor-pro']) {
                 if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false)) {
                     wp_enqueue_script('gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
                 }
