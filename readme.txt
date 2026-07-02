@@ -39,6 +39,7 @@ An easy way to identify all of the elements used in your Elementor-built website
 * Fix: Prevent a potential PHP notice when saving a Team Member with a field missing from the submitted form.
 * General: Removed an unused, orphaned JavaScript build file.
 * Security: Replaced unmaintained Laravel Mix/Sass build tooling with a minimal Webpack setup, resolving all known npm dependency vulnerabilities.
+* Enhancement: Reduced the number of database queries used to load plugin settings.
 
 #### 1.5.5 - 2025-11-11
 * Fix: Resolve some PHP warnings.

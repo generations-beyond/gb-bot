@@ -1,13 +1,27 @@
 <?php
 
+/**
+ * Get a gbbot_ setting from the already-loaded $gbbot->settings cache to
+ * avoid an extra query, falling back to get_option() if the $gbbot global
+ * isn't available yet (seen in some WP-CLI bootstrap contexts).
+ */
+function gbbot_setting($key, $default = false)
+{
+    global $gbbot;
+    if ($gbbot instanceof GBBot) {
+        return $gbbot->settings[$key] ?? $default;
+    }
+    return get_option($key, $default);
+}
+
 /*
 *Team Post type options
 */
 function gbbot_cpt_settings($option)
 {
-    $gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable', false);
-    $gbbot_team_post_label = !empty(get_option('gbbot_team_post_label')) ? get_option('gbbot_team_post_label') : 'Team';
-    $gbbot_team_post_type = !empty(get_option('gbbot_team_post_type')) ? get_option('gbbot_team_post_type') : 'team_member';
+    $gbbot_team_cpt_enable = gbbot_setting('gbbot_team_cpt_enable', false);
+    $gbbot_team_post_label = gbbot_setting('gbbot_team_post_label') ?: 'Team';
+    $gbbot_team_post_type = gbbot_setting('gbbot_team_post_type') ?: 'team_member';
 
     switch ($option) {
         case 'enabled':
@@ -346,8 +360,8 @@ if ($gbbot->active_plugins['rank-math']) {
     * A few filters to replace Rank Math's author schema with a predefined user.
     */
     add_action('init', function () {
-        $author_blacklist = get_option('gbbot_rank_math_author_blacklist', []); // Array of display names of unwanted authors.
-        $author_replacement_id = get_option('gbbot_rank_math_author_replacement', 0); // User ID of new author. Use non-existing ID to default to Site info.
+        $author_blacklist = gbbot_setting('gbbot_rank_math_author_blacklist', []); // Array of display names of unwanted authors.
+        $author_replacement_id = gbbot_setting('gbbot_rank_math_author_replacement', 0); // User ID of new author. Use non-existing ID to default to Site info.
         $author_replacement_exists = get_userdata($author_replacement_id) !== false;
         $author_replacement = array(
             'name' => $author_replacement_exists ? get_the_author_meta('display_name', $author_replacement_id) : get_bloginfo('name'),
@@ -425,7 +439,7 @@ if (!$GBTC_ACTIVE) {
     add_filter('manage_posts_columns', 'gb_add_image_column_to_post_type', 10, 2);
     function gb_add_image_column_to_post_type($post_columns, $post_type)
     {
-        $enabled_post_types = get_option('gbbot_featured_image_post_types', []);
+        $enabled_post_types = gbbot_setting('gbbot_featured_image_post_types', []);
         if (in_array($post_type, $enabled_post_types)) {
             $post_columns = array_slice($post_columns, 0, 1, true) +
                             array('image' => __('Image', 'Image of the post')) +
@@ -552,7 +566,7 @@ if (!$GBTC_ACTIVE) {
     }
 
     // Check if the return to top option is enabled
-    $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right');
+    $gbbot_enable_return_to_top = gbbot_setting('gbbot_enable_return_to_top', 'bottom_right');
     if ($gbbot_enable_return_to_top !== 'none') {
         add_action('wp_footer', function () use ($gbbot_enable_return_to_top) { ?>
             <a aria-label="Scroll to the top of the page" href="#" id="scroll-top" class="scroll-top <?=$gbbot_enable_return_to_top?>"
