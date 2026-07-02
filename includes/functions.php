@@ -38,12 +38,12 @@ function gbbot_register_cpt()
     $post_type = gbbot_cpt_settings("type");
 
     $labels = [
-        "name" => __("$post_label", "custom-post-type-ui"),
-        "singular_name" => __("$post_label", "custom-post-type-ui"),
+        "name" => __($post_label, "custom-post-type-ui"),
+        "singular_name" => __($post_label, "custom-post-type-ui"),
     ];
 
     $args = [
-        "label" => __("$post_label", "custom-post-type-ui"),
+        "label" => __($post_label, "custom-post-type-ui"),
         "labels" => $labels,
         "description" => "",
         "public" => true,
@@ -60,14 +60,14 @@ function gbbot_register_cpt()
         "capability_type" => "post",
         "map_meta_cap" => true,
         "hierarchical" => false,
-        "rewrite" => [ "slug" => "$post_type", "with_front" => true ],
+        "rewrite" => [ "slug" => $post_type, "with_front" => true ],
         "query_var" => true,
         "menu_icon" => "dashicons-admin-users",
         "supports" => [ "title", "thumbnail" ],
         "show_in_graphql" => false,
     ];
 
-    register_post_type("$post_type", $args);
+    register_post_type($post_type, $args);
 }
 
 /**
