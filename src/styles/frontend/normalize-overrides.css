@@ -98,8 +98,8 @@ html {
 body {
 	font-size: 14px;
 	line-height: 1.8;
-	font-family: $base-font-family;
-	color: $color-text;
+	font-family: var(--gbbot-base-font-family);
+	color: var(--gbbot-color-text);
 	background-color: #fff;
 	overflow: hidden !important;
 }
@@ -124,10 +124,10 @@ a:focus {
 	transition: all .3s ease;
 }
 a {
-	color:$color-text;
+	color: var(--gbbot-color-text);
 	&:hover,
 	&:focus {
-		color:$color-primary;
+		color: var(--gbbot-color-primary);
 	}
 }
 ul,

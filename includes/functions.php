@@ -1,13 +1,27 @@
 <?php
 
+/**
+ * Get a gbbot_ setting from the already-loaded $gbbot->settings cache to
+ * avoid an extra query, falling back to get_option() if the $gbbot global
+ * isn't available yet (seen in some WP-CLI bootstrap contexts).
+ */
+function gbbot_setting($key, $default = false)
+{
+    global $gbbot;
+    if ($gbbot instanceof GBBot) {
+        return $gbbot->settings[$key] ?? $default;
+    }
+    return get_option($key, $default);
+}
+
 /*
 *Team Post type options
 */
 function gbbot_cpt_settings($option)
 {
-    $gbbot_team_cpt_enable = get_option('gbbot_team_cpt_enable', false);
-    $gbbot_team_post_label = !empty(get_option('gbbot_team_post_label')) ? get_option('gbbot_team_post_label') : 'Team';
-    $gbbot_team_post_type = !empty(get_option('gbbot_team_post_type')) ? get_option('gbbot_team_post_type') : 'team_member';
+    $gbbot_team_cpt_enable = gbbot_setting('gbbot_team_cpt_enable', false);
+    $gbbot_team_post_label = gbbot_setting('gbbot_team_post_label') ?: 'Team';
+    $gbbot_team_post_type = gbbot_setting('gbbot_team_post_type') ?: 'team_member';
 
     switch ($option) {
         case 'enabled':
@@ -38,12 +52,12 @@ function gbbot_register_cpt()
     $post_type = gbbot_cpt_settings("type");
 
     $labels = [
-        "name" => __("$post_label", "custom-post-type-ui"),
-        "singular_name" => __("$post_label", "custom-post-type-ui"),
+        "name" => __($post_label, "custom-post-type-ui"),
+        "singular_name" => __($post_label, "custom-post-type-ui"),
     ];
 
     $args = [
-        "label" => __("$post_label", "custom-post-type-ui"),
+        "label" => __($post_label, "custom-post-type-ui"),
         "labels" => $labels,
         "description" => "",
         "public" => true,
@@ -60,14 +74,14 @@ function gbbot_register_cpt()
         "capability_type" => "post",
         "map_meta_cap" => true,
         "hierarchical" => false,
-        "rewrite" => [ "slug" => "$post_type", "with_front" => true ],
+        "rewrite" => [ "slug" => $post_type, "with_front" => true ],
         "query_var" => true,
         "menu_icon" => "dashicons-admin-users",
         "supports" => [ "title", "thumbnail" ],
         "show_in_graphql" => false,
     ];
 
-    register_post_type("$post_type", $args);
+    register_post_type($post_type, $args);
 }
 
 /**
@@ -79,6 +93,30 @@ function gbbot_cpt_register_meta_boxes()
     $post_type = gbbot_cpt_settings("type");
 
     add_meta_box($post_type . '-details-group', $post_label . " Details", 'gbbot_team_details_display_callback', $post_type);
+}
+
+/**
+ * Team CPT metabox field definitions, keyed by field suffix, mapped to
+ * the sanitizer callback to run on save (null = no sanitization).
+ *
+ * Single source of truth shared by the display and save callbacks below,
+ * and by includes/partials/team-metabox.php (which reads $team[$field]).
+ */
+function gbbot_team_fields()
+{
+    return [
+        'name-first' => 'sanitize_text_field',
+        'name-middle' => 'sanitize_text_field',
+        'name-last' => 'sanitize_text_field',
+        'title' => 'sanitize_text_field',
+        'description' => null,
+        'contact-phone' => 'sanitize_text_field',
+        'contact-extension' => 'sanitize_text_field',
+        'contact-email' => 'sanitize_text_field',
+        'social-linkedin' => 'esc_url_raw',
+        'social-instagram' => 'esc_url_raw',
+        'social-twitter' => 'esc_url_raw',
+    ];
 }
 
 /**
@@ -97,18 +135,11 @@ function gbbot_team_details_display_callback($post)
     $nonce_file = $post_type . '_details_nonce';
     wp_nonce_field(basename(__FILE__), "$nonce_file");
 
-    // Get or create field variables
-    $team_name_first = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-first', true);
-    $team_name_middle = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-middle', true);
-    $team_name_last = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-last', true);
-    $team_title = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-title', true);
-    $team_description = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-description', true);
-    $team_contact_phone = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-phone', true);
-    $team_contact_extension = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-extension', true);
-    $team_contact_email = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-email', true);
-    $team_social_linkedin = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-linkedin', true);
-    $team_social_instagram = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-instagram', true);
-    $team_social_twitter = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-twitter', true);
+    // Get field values, keyed by field suffix
+    $team = [];
+    foreach (gbbot_team_fields() as $field => $sanitizer) {
+        $team[$field] = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-' . $field, true);
+    }
 
     // html and style for metabox
     include 'partials/team-metabox.php';
@@ -165,36 +196,16 @@ function gbbot_save_meta_box($post_id)
     }
 
     // # Now, our data is safe for saving to the database
-    // ## Sanitize the user input.
+    // ## Sanitize the user input and update the meta field (custom field).
     // https://developer.wordpress.org/reference/functions/sanitize_text_field/
-    $team_name_first = sanitize_text_field($_POST['_' . $post_type . '-name-first']);
-    $team_name_middle = sanitize_text_field($_POST['_' . $post_type . '-name-middle']);
-    $team_name_last = sanitize_text_field($_POST['_' . $post_type . '-name-last']);
-    $team_title = sanitize_text_field($_POST['_' . $post_type . '-title']);
-    $team_description = $_POST['_' . $post_type . '-description'];
-
-    $team_contact_phone = sanitize_text_field($_POST['_' . $post_type . '-contact-phone']);
-    $team_contact_extension = sanitize_text_field($_POST['_' . $post_type . '-contact-extension']);
-    $team_contact_email = sanitize_text_field($_POST['_' . $post_type . '-contact-email']);
-    $team_social_linkedin = esc_url_raw($_POST['_' . $post_type . '-social-linkedin']);
-    $team_social_instagram = esc_url_raw($_POST['_' . $post_type . '-social-instagram']);
-    $team_social_twitter = esc_url_raw($_POST['_' . $post_type . '-social-twitter']);
-
-    // ## Update the meta field(custom field).
     // https://developer.wordpress.org/reference/functions/update_post_meta/
-    // If the meta field never been saved to the wp_postmeta table before,
-    // update_post_meta function will save the meta field for you.
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-first', $team_name_first);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-middle', $team_name_middle);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-last', $team_name_last);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-title', $team_title);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-description', $team_description);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-phone', $team_contact_phone);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-extension', $team_contact_extension);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-email', $team_contact_email);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-linkedin', $team_social_linkedin);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-instagram', $team_social_instagram);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-twitter', $team_social_twitter);
+    foreach (gbbot_team_fields() as $field => $sanitizer) {
+        $value = $_POST['_' . $post_type . '-' . $field] ?? '';
+        if ($sanitizer) {
+            $value = call_user_func($sanitizer, $value);
+        }
+        update_post_meta($post_id, '_gbcpt_' . $post_type . '-' . $field, $value);
+    }
 
     // ## Delete the meta field(custom field)
     // The meta field value will stay with the post ID until the post is deleted permanently.
@@ -349,8 +360,8 @@ if ($gbbot->active_plugins['rank-math']) {
     * A few filters to replace Rank Math's author schema with a predefined user.
     */
     add_action('init', function () {
-        $author_blacklist = get_option('gbbot_rank_math_author_blacklist', []); // Array of display names of unwanted authors.
-        $author_replacement_id = get_option('gbbot_rank_math_author_replacement', 0); // User ID of new author. Use non-existing ID to default to Site info.
+        $author_blacklist = gbbot_setting('gbbot_rank_math_author_blacklist', []); // Array of display names of unwanted authors.
+        $author_replacement_id = gbbot_setting('gbbot_rank_math_author_replacement', 0); // User ID of new author. Use non-existing ID to default to Site info.
         $author_replacement_exists = get_userdata($author_replacement_id) !== false;
         $author_replacement = array(
             'name' => $author_replacement_exists ? get_the_author_meta('display_name', $author_replacement_id) : get_bloginfo('name'),
@@ -428,7 +439,7 @@ if (!$GBTC_ACTIVE) {
     add_filter('manage_posts_columns', 'gb_add_image_column_to_post_type', 10, 2);
     function gb_add_image_column_to_post_type($post_columns, $post_type)
     {
-        $enabled_post_types = get_option('gbbot_featured_image_post_types', []);
+        $enabled_post_types = gbbot_setting('gbbot_featured_image_post_types', []);
         if (in_array($post_type, $enabled_post_types)) {
             $post_columns = array_slice($post_columns, 0, 1, true) +
                             array('image' => __('Image', 'Image of the post')) +
@@ -555,7 +566,7 @@ if (!$GBTC_ACTIVE) {
     }
 
     // Check if the return to top option is enabled
-    $gbbot_enable_return_to_top = get_option('gbbot_enable_return_to_top', 'bottom_right');
+    $gbbot_enable_return_to_top = gbbot_setting('gbbot_enable_return_to_top', 'bottom_right');
     if ($gbbot_enable_return_to_top !== 'none') {
         add_action('wp_footer', function () use ($gbbot_enable_return_to_top) { ?>
             <a aria-label="Scroll to the top of the page" href="#" id="scroll-top" class="scroll-top <?=$gbbot_enable_return_to_top?>"

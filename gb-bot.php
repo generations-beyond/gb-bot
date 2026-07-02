@@ -4,7 +4,7 @@
 * Plugin Name: GB&bull;BOT
 * Plugin URI: https://generationsbeyond.com/gb-bot/
 * Description: A collection of useful functions and features to proactively enhance your website.
-* Version: 1.5.5
+* Version: 1.6.0
 * Author: Generations Beyond
 * Author URI: https://generationsbeyond.com/
 * License: GPLv3
@@ -13,6 +13,22 @@
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
+/**
+ * Render an admin notice row underneath the plugin entry on the Plugins page.
+ */
+function gbbot_render_plugin_row_notice($message, $notice_class = 'notice-info', $style = '')
+{
+    $wp_list_table = _get_list_table('WP_Plugins_List_Table');
+    printf(
+        '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="%s" class="notice inline %s notice-alt"><p>%s</p></div>%s</td></tr>',
+        $wp_list_table->get_column_count(),
+        $style,
+        $notice_class,
+        $message,
+        '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+    );
+}
+
 // Check if GB Theme Core is active
 global $GBTC_ACTIVE;
 $GBTC_ACTIVE = file_exists(get_stylesheet_directory() . '/core/init.php');
@@ -20,12 +36,10 @@ $GBTC_ACTIVE = file_exists(get_stylesheet_directory() . '/core/init.php');
 if ($GBTC_ACTIVE) {
     // Do not allow plugin updates
     add_action('after_plugin_row_gb-bot/gb-bot.php', function ($file, $plugin) {
-        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
-        printf(
-            '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="background: #fefefe;" class="notice inline notice-info notice-alt"><p>%s</p></div>%s</td></tr>',
-            $wp_list_table->get_column_count(),
+        gbbot_render_plugin_row_notice(
             '<strong>Note:</strong> You are currently using <strong>GB Theme Core</strong> as your active theme. Switch to <strong>Proactive by GB</strong> to continue receiving ' . $plugin['Name'] . ' updates.',
-            '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+            'notice-info',
+            'background: #fefefe;'
         );
     }, 10, 2);
 } else {
@@ -52,6 +66,7 @@ class GBBot
     public $active_plugins;
     public $notices;
     public $settings;
+    public $rawOptions;
     public $is_staging;
     public $super_users;
     public $is_super_user;
@@ -115,18 +130,15 @@ class GBBot
         }
 
         // Add branch name notice after plugin row if not on master
-        $gbbot_active_branch = get_option('gbbot_active_branch', 'master');
+        $gbbot_active_branch = $this->settings['gbbot_active_branch'];
         if ($gbbot_active_branch != 'master') {
             add_action('admin_init', function () use ($gbbot_active_branch) {
                 // Only show if current user is a super user
                 if ($this->is_super_user) {
                     add_action('after_plugin_row_gb-bot/gb-bot.php', function ($file, $plugin) use ($gbbot_active_branch) {
-                        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
-                        printf(
-                            '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div class="notice inline notice-warning notice-alt"><p>%s</p></div>%s</td></tr>',
-                            $wp_list_table->get_column_count(),
+                        gbbot_render_plugin_row_notice(
                             '<strong>Note:</strong> You are currently configured to receive updates from the <code>' . $gbbot_active_branch . '</code> branch of ' . $plugin['Name'] . '.',
-                            '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+                            'notice-warning'
                         );
                     }, 10, 2);
                 }
@@ -286,7 +298,7 @@ class GBBot
 
             // AlpineJS
             if ($this->active_plugins['elementor'] && $this->active_plugins['elementor-pro']) {
-                if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false)) {
+                if (!(\Elementor\Plugin::$instance->preview->is_preview_mode() ?? false)) {
                     wp_enqueue_script('gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
                 }
             }
@@ -362,31 +374,62 @@ class GBBot
     }
 
     /**
+     * Fetch every 'gbbot_' prefixed option in a single query, keyed by option
+     * name, into $this->rawOptions. Options that don't autoload (or don't
+     * exist at all) otherwise cost WordPress one individual query each, since
+     * its "option not found" cache is only request-scoped without a
+     * persistent object cache. Used by refreshSettings() and rawOption().
+     */
+    public function fetchRawOptions()
+    {
+        global $wpdb;
+        $rows = $wpdb->get_results($wpdb->prepare(
+            "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE %s",
+            $wpdb->esc_like('gbbot_') . '%'
+        ));
+        $this->rawOptions = [];
+        foreach ($rows as $row) {
+            $this->rawOptions[$row->option_name] = maybe_unserialize($row->option_value);
+        }
+    }
+
+    /**
+     * Get a single value out of the raw options cache, falling back to
+     * $default if the option doesn't exist in the database.
+     */
+    public function rawOption($key, $default = false)
+    {
+        return array_key_exists($key, $this->rawOptions) ? $this->rawOptions[$key] : $default;
+    }
+
+    /**
     * Refresh settings property with latest values from DB (or the defaults)
     */
     public function refreshSettings()
     {
+        $this->fetchRawOptions();
+
         $this->settings = array(
             // General
-            'gbbot_team_dashboard_widget_enable' => get_option('gbbot_team_dashboard_widget_enable', true),
+            'gbbot_team_dashboard_widget_enable' => $this->rawOption('gbbot_team_dashboard_widget_enable', true),
 
-            'gbbot_team_cpt_enable' => get_option('gbbot_team_cpt_enable', false),
-            'gbbot_team_post_label' => get_option('gbbot_team_post_label', ''),
-            'gbbot_team_post_type' => get_option('gbbot_team_post_type', ''),
+            'gbbot_team_cpt_enable' => $this->rawOption('gbbot_team_cpt_enable', false),
+            'gbbot_team_post_label' => $this->rawOption('gbbot_team_post_label', ''),
+            'gbbot_team_post_type' => $this->rawOption('gbbot_team_post_type', ''),
 
-            'gbbot_featured_image_post_types' => get_option('gbbot_featured_image_post_types', []),
+            'gbbot_featured_image_post_types' => $this->rawOption('gbbot_featured_image_post_types', []),
 
-            'gbbot_enable_return_to_top' => get_option('gbbot_enable_return_to_top', 'bottom_right'),
+            'gbbot_enable_return_to_top' => $this->rawOption('gbbot_enable_return_to_top', 'bottom_right'),
 
             // Integrations
-            'gbbot_rebound_id' => esc_html(wp_unslash(get_option('gbbot_rebound_id', ''))),
+            'gbbot_rebound_id' => esc_html(wp_unslash($this->rawOption('gbbot_rebound_id', ''))),
 
             // Advanced
-            'gbbot_active_branch' => get_option('gbbot_active_branch', ''),
-            'gbbot_super_users' => get_option('gbbot_super_users', []),
-            'gbbot_admin_css' => get_option('gbbot_admin_css', ''),
-            'gbbot_rank_math_author_blacklist' => get_option('gbbot_rank_math_author_blacklist', []),
-            'gbbot_rank_math_author_replacement' => get_option('gbbot_rank_math_author_replacement', 0),
+            'gbbot_active_branch' => $this->rawOption('gbbot_active_branch', 'master'),
+            'gbbot_super_users' => $this->rawOption('gbbot_super_users', []),
+            'gbbot_admin_css' => $this->rawOption('gbbot_admin_css', ''),
+            'gbbot_rank_math_author_blacklist' => $this->rawOption('gbbot_rank_math_author_blacklist', []),
+            'gbbot_rank_math_author_replacement' => $this->rawOption('gbbot_rank_math_author_replacement', 0),
         );
     }
 
@@ -545,7 +588,7 @@ class GBBot
         }
 
         // Get meta
-        $meta = get_option('gbbot_rebound_id', '');
+        $meta = $this->rawOption('gbbot_rebound_id', '');
         if (empty($meta)) {
             return;
         }

@@ -1,0 +1,15 @@
+:root {
+    --gbbot-base-font-family: var(--e-global-typography-primary-font-family), Sans-serif;
+
+    --gbbot-color-white: #fff;
+
+    --gbbot-color-primary: var(--e-global-color-primary);
+    --gbbot-color-secondary: var(--e-global-color-secondary);
+    --gbbot-color-text: var(--e-global-color-text);
+    --gbbot-color-accent: var(--e-global-color-accent);
+
+    --gbbot-color-border: #dddddd;
+    --gbbot-color-border-dark: #bbbbbb;
+    --gbbot-color-btn: var(--gbbot-color-primary);
+    --gbbot-color-btn-hover: var(--gbbot-color-accent);
+}

@@ -2,7 +2,7 @@
 Contributors: genbeyond
 Requires at least: 6.1.1
 Tested up to: 6.7.1
-Stable tag: 1.5.5
+Stable tag: 1.6.0
 Requires PHP: 7.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -33,6 +33,13 @@ Adds a button that returns the user to the top of the page when clicked.
 An easy way to identify all of the elements used in your Elementor-built website along with the locations of these elements to assist in the optimization process.
 
 == Changelog ==
+
+#### 1.6.0 - 2026-07-02
+* Code Quality: Reduced duplicated code in the Team Member custom post type metabox, admin update notices, and CPT registration.
+* Fix: Prevent a potential PHP notice when saving a Team Member with a field missing from the submitted form.
+* General: Removed an unused, orphaned JavaScript build file.
+* Security: Replaced unmaintained Laravel Mix/Sass build tooling with a minimal Webpack setup, resolving all known npm dependency vulnerabilities.
+* Enhancement: Reduced the number of database queries used to load plugin settings.
 
 #### 1.5.5 - 2025-11-11
 * Fix: Resolve some PHP warnings.

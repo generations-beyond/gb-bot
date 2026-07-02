@@ -15,7 +15,7 @@
 	display: none !important;
 }
 
-// GB Bot Settings page
+/* GB Bot Settings page */
 .gbbot-nav-tab {
 	margin-bottom: 15px;
 	& a.nav-tab:focus,
