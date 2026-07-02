@@ -82,6 +82,30 @@ function gbbot_cpt_register_meta_boxes()
 }
 
 /**
+ * Team CPT metabox field definitions, keyed by field suffix, mapped to
+ * the sanitizer callback to run on save (null = no sanitization).
+ *
+ * Single source of truth shared by the display and save callbacks below,
+ * and by includes/partials/team-metabox.php (which reads $team[$field]).
+ */
+function gbbot_team_fields()
+{
+    return [
+        'name-first' => 'sanitize_text_field',
+        'name-middle' => 'sanitize_text_field',
+        'name-last' => 'sanitize_text_field',
+        'title' => 'sanitize_text_field',
+        'description' => null,
+        'contact-phone' => 'sanitize_text_field',
+        'contact-extension' => 'sanitize_text_field',
+        'contact-email' => 'sanitize_text_field',
+        'social-linkedin' => 'esc_url_raw',
+        'social-instagram' => 'esc_url_raw',
+        'social-twitter' => 'esc_url_raw',
+    ];
+}
+
+/**
  * Meta box display callback.
  *
  * @param WP_Post $post Current post object.
@@ -97,18 +121,11 @@ function gbbot_team_details_display_callback($post)
     $nonce_file = $post_type . '_details_nonce';
     wp_nonce_field(basename(__FILE__), "$nonce_file");
 
-    // Get or create field variables
-    $team_name_first = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-first', true);
-    $team_name_middle = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-middle', true);
-    $team_name_last = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-name-last', true);
-    $team_title = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-title', true);
-    $team_description = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-description', true);
-    $team_contact_phone = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-phone', true);
-    $team_contact_extension = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-extension', true);
-    $team_contact_email = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-contact-email', true);
-    $team_social_linkedin = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-linkedin', true);
-    $team_social_instagram = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-instagram', true);
-    $team_social_twitter = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-social-twitter', true);
+    // Get field values, keyed by field suffix
+    $team = [];
+    foreach (gbbot_team_fields() as $field => $sanitizer) {
+        $team[$field] = get_post_meta($post->ID, '_gbcpt_' . $post_type . '-' . $field, true);
+    }
 
     // html and style for metabox
     include 'partials/team-metabox.php';
@@ -165,36 +182,16 @@ function gbbot_save_meta_box($post_id)
     }
 
     // # Now, our data is safe for saving to the database
-    // ## Sanitize the user input.
+    // ## Sanitize the user input and update the meta field (custom field).
     // https://developer.wordpress.org/reference/functions/sanitize_text_field/
-    $team_name_first = sanitize_text_field($_POST['_' . $post_type . '-name-first']);
-    $team_name_middle = sanitize_text_field($_POST['_' . $post_type . '-name-middle']);
-    $team_name_last = sanitize_text_field($_POST['_' . $post_type . '-name-last']);
-    $team_title = sanitize_text_field($_POST['_' . $post_type . '-title']);
-    $team_description = $_POST['_' . $post_type . '-description'];
-
-    $team_contact_phone = sanitize_text_field($_POST['_' . $post_type . '-contact-phone']);
-    $team_contact_extension = sanitize_text_field($_POST['_' . $post_type . '-contact-extension']);
-    $team_contact_email = sanitize_text_field($_POST['_' . $post_type . '-contact-email']);
-    $team_social_linkedin = esc_url_raw($_POST['_' . $post_type . '-social-linkedin']);
-    $team_social_instagram = esc_url_raw($_POST['_' . $post_type . '-social-instagram']);
-    $team_social_twitter = esc_url_raw($_POST['_' . $post_type . '-social-twitter']);
-
-    // ## Update the meta field(custom field).
     // https://developer.wordpress.org/reference/functions/update_post_meta/
-    // If the meta field never been saved to the wp_postmeta table before,
-    // update_post_meta function will save the meta field for you.
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-first', $team_name_first);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-middle', $team_name_middle);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-name-last', $team_name_last);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-title', $team_title);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-description', $team_description);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-phone', $team_contact_phone);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-extension', $team_contact_extension);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-contact-email', $team_contact_email);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-linkedin', $team_social_linkedin);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-instagram', $team_social_instagram);
-    update_post_meta($post_id, '_gbcpt_' . $post_type . '-social-twitter', $team_social_twitter);
+    foreach (gbbot_team_fields() as $field => $sanitizer) {
+        $value = $_POST['_' . $post_type . '-' . $field] ?? '';
+        if ($sanitizer) {
+            $value = call_user_func($sanitizer, $value);
+        }
+        update_post_meta($post_id, '_gbcpt_' . $post_type . '-' . $field, $value);
+    }
 
     // ## Delete the meta field(custom field)
     // The meta field value will stay with the post ID until the post is deleted permanently.
