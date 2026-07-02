@@ -297,7 +297,7 @@ class GBBot
 
             // AlpineJS
             if ($this->active_plugins['elementor'] && $this->active_plugins['elementor-pro']) {
-                if (! (null !== (\Elementor\Plugin::$instance->preview->is_preview_mode()) ? \Elementor\Plugin::$instance->preview->is_preview_mode() : false)) {
+                if (!(\Elementor\Plugin::$instance->preview->is_preview_mode() ?? false)) {
                     wp_enqueue_script('gb-alpinejs', '//unpkg.com/alpinejs@3.5.0', array(), null);
                 }
             }
