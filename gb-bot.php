@@ -13,6 +13,22 @@
 
 use YahnisElsts\PluginUpdateChecker\v5\PucFactory;
 
+/**
+ * Render an admin notice row underneath the plugin entry on the Plugins page.
+ */
+function gbbot_render_plugin_row_notice($message, $notice_class = 'notice-info', $style = '')
+{
+    $wp_list_table = _get_list_table('WP_Plugins_List_Table');
+    printf(
+        '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="%s" class="notice inline %s notice-alt"><p>%s</p></div>%s</td></tr>',
+        $wp_list_table->get_column_count(),
+        $style,
+        $notice_class,
+        $message,
+        '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+    );
+}
+
 // Check if GB Theme Core is active
 global $GBTC_ACTIVE;
 $GBTC_ACTIVE = file_exists(get_stylesheet_directory() . '/core/init.php');
@@ -20,12 +36,10 @@ $GBTC_ACTIVE = file_exists(get_stylesheet_directory() . '/core/init.php');
 if ($GBTC_ACTIVE) {
     // Do not allow plugin updates
     add_action('after_plugin_row_gb-bot/gb-bot.php', function ($file, $plugin) {
-        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
-        printf(
-            '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div style="background: #fefefe;" class="notice inline notice-info notice-alt"><p>%s</p></div>%s</td></tr>',
-            $wp_list_table->get_column_count(),
+        gbbot_render_plugin_row_notice(
             '<strong>Note:</strong> You are currently using <strong>GB Theme Core</strong> as your active theme. Switch to <strong>Proactive by GB</strong> to continue receiving ' . $plugin['Name'] . ' updates.',
-            '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+            'notice-info',
+            'background: #fefefe;'
         );
     }, 10, 2);
 } else {
@@ -121,12 +135,9 @@ class GBBot
                 // Only show if current user is a super user
                 if ($this->is_super_user) {
                     add_action('after_plugin_row_gb-bot/gb-bot.php', function ($file, $plugin) use ($gbbot_active_branch) {
-                        $wp_list_table = _get_list_table('WP_Plugins_List_Table');
-                        printf(
-                            '<tr class="plugin-update-tr active"><td colspan="%s" class="plugin-update"><div class="notice inline notice-warning notice-alt"><p>%s</p></div>%s</td></tr>',
-                            $wp_list_table->get_column_count(),
+                        gbbot_render_plugin_row_notice(
                             '<strong>Note:</strong> You are currently configured to receive updates from the <code>' . $gbbot_active_branch . '</code> branch of ' . $plugin['Name'] . '.',
-                            '<script>document.querySelector(\'[data-plugin="gb-bot/gb-bot.php"]\').classList.add(\'update\')</script>'
+                            'notice-warning'
                         );
                     }, 10, 2);
                 }
