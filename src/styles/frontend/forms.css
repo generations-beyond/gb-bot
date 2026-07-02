@@ -1,6 +1,8 @@
-// FORMS
-// Based of Pure forms style
-// https://github.com/yahoo/pure/blob/master/src/forms/css/forms.css
+/*
+FORMS
+Based of Pure forms style
+https://github.com/yahoo/pure/blob/master/src/forms/css/forms.css
+*/
 
 form input[type="text"],
 form input[type="password"],
@@ -26,8 +28,8 @@ form textarea {
     padding: 6px 12px;
     vertical-align: middle;
     background-color: transparent;
-    color: $color-text;
-    border: 1px solid $color-border;
+    color: var(--gbbot-color-text);
+    border: 1px solid var(--gbbot-color-border);
     border-radius: 3px;
     transition: all .3s ease;
 }
@@ -132,7 +134,7 @@ form input[type="tel"]:focus,
 form input[type="color"]:focus,
 form select:focus,
 form textarea:focus {
-    border-color: darken($color-border, 13.5%);
+    border-color: var(--gbbot-color-border-dark);
     outline: 0;
 }
 
@@ -141,7 +143,7 @@ Need to separate out the :not() selector from the rest of the CSS 2.1 selectors
 since IE8 won't execute CSS that contains a CSS3 selector.
 */
 form input:not([type]):focus {
-    border-color: darken($color-border, 13.5%);
+    border-color: var(--gbbot-color-border-dark);
     outline: 0;
 }
 
@@ -257,8 +259,8 @@ body div.wpforms-container-full .wpforms-form button[type=submit],
 body div.wpforms-container-full .wpforms-form .wpforms-page-button {
     display: inline-block;
     font-family: inherit;
-    background-color: $color-btn;
-    color: $color-white;
+    background-color: var(--gbbot-color-btn);
+    color: var(--gbbot-color-white);
     font-size: 12px;
     font-weight: 600;
     text-transform: uppercase;
@@ -285,8 +287,8 @@ button[type="submit"]:focus,
 body div.wpforms-container-full .wpforms-form input[type=submit]:hover,
 body div.wpforms-container-full .wpforms-form button[type=submit]:hover,
 body div.wpforms-container-full .wpforms-form .wpforms-page-button:hover {
-    background-color: $color-btn-hover;
-    color: $color-white;
+    background-color: var(--gbbot-color-btn-hover);
+    color: var(--gbbot-color-white);
 }
 
 input[type="button"]:focus,
@@ -331,7 +333,7 @@ a.pure-button-selected {
     display: inline-block;
     width: 100%;
 
-    label {
+    & label {
         display: inline-block;
     }
 }

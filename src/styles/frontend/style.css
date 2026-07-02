@@ -5,7 +5,7 @@
  * 
  */
 
-// Remove margin-bottom by default for last-child text elements
+/* Remove margin-bottom by default for last-child text elements */
 p:last-child,
 ul:last-child,
 ol:last-child {
@@ -129,12 +129,12 @@ Various Elementor Default fixes
 	width: auto !important;
 }
 
-// Fix for popup bg colors
+/* Fix for popup bg colors */
 .dialog-widget .dialog-widget-content {
 	background-color: #fff;
 }
 
-// WYSIWYG Alignment fixes
+/* WYSIWYG Alignment fixes */
 img.aligncenter,
 img.alignright,
 .wp-caption.aligncenter,
